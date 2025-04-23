@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Story 1</title>
+  <title>The Enchanted Forest</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -27,37 +27,208 @@
       padding: 2rem;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: left;
     }
-    button {
+    .choice-btn {
+      display: block;
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 10px 20px;
+      background: #4a6fa5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.3s;
+    }
+    .choice-btn:hover {
+      background: #166088;
+    }
+    .back-btn {
       margin-top: 1rem;
       padding: 10px 20px;
-      background: #4caf50;
+      background: #6c757d;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
+    .story-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+    }
+    .inventory {
+      background: #f8f9fa;
+      padding: 0.5rem;
+      border-radius: 5px;
+      margin: 1rem 0;
+    }
+    .inventory span {
+      display: inline-block;
+      background: rgba(74, 111, 165, 0.2);
+      padding: 0.3rem 0.6rem;
+      border-radius: 50px;
+      margin-right: 0.5rem;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <div>Story Game</div>
-    <div id="profileName">Profile ▼</div>
+<div class="navbar">
+  <div>Story Game</div>
+  <div id="profileName">Profile ▼</div>
+</div>
+<div class="container">
+  <div class="content-box" id="storyContent">
+    <!-- Story content will be dynamically inserted here -->
   </div>
-  <div class="container">
-    <div class="content-box">
-      <h2>Story 1</h2>
-      <p id="playerName"></p>
-      <p>This story is currently blank.</p>
-      <button onclick="window.location.href='../home.html'">← Back</button>
-    </div>
-  </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const name = localStorage.getItem('playerName') || "Player";
-      document.getElementById("playerName").textContent = `Welcome, ${name}`;
-      document.getElementById("profileName").textContent = name + " ▼";
+</div>
+<script>
+  // Story data - contains all pages and choices
+  const story = {
+    start: {
+      title: "The Enchanted Forest",
+      image: "https://source.unsplash.com/random/800x400/?forest,magical",
+      text: `You stand at the edge of the Whispering Woods, where the trees are said to speak to those who listen. The path splits three ways:
+        <ol>
+          <li>A sunlit trail to the east</li>
+          <li>A dark, mossy path to the west</li>
+          <li>A narrow animal track leading north</li>
+        </ol>
+        Your satchel contains: a loaf of bread, a flask of water, and a tinderbox.`,
+      choices: [
+        { text: "Take the sunlit eastern trail", next: "eastTrail", gain: "sunstone" },
+        { text: "Follow the dark western path", next: "westTrail" },
+        { text: "Try the narrow northern track", next: "northTrail" }
+      ]
+    },
+    eastTrail: {
+      title: "Sunlit Clearing",
+      image: "https://source.unsplash.com/random/800x400/?forest,clearing",
+      text: `The golden sunlight filters through the leaves as you enter a circular clearing. At the center lies a smooth white stone that seems to glow faintly. As you pick it up, warmth spreads through your fingers. A rustling in the bushes reveals a fox watching you intently.`,
+      choices: [
+        { text: "Show the fox your new stone", next: "foxEncounter" },
+        { text: "Continue along the path", next: "riverCrossing" },
+        { text: "Return to the forest edge", next: "start" }
+      ],
+      inventory: ["sunstone"]
+    },
+    westTrail: {
+      title: "The Dark Path",
+      image: "https://source.unsplash.com/random/800x400/?forest,dark",
+      text: `The air grows colder as you push through the dense foliage. Strange symbols are carved into the ancient trees. Suddenly, you hear a low growl. From the shadows emerges a wolf with glowing yellow eyes, blocking your path.`,
+      choices: [
+        { text: "Stand your ground and stare back", next: "wolfStandoff" },
+        { text: "Offer it some bread from your pack", next: "wolfBread" },
+        { text: "Slowly retreat the way you came", next: "start" }
+      ]
+    },
+    northTrail: {
+      title: "The Hidden Path",
+      image: "https://source.unsplash.com/random/800x400/?forest,path",
+      text: `The narrow track leads you up a steep incline. As you climb, you notice strange mushrooms glowing faintly blue in the dim light. A small wooden bridge spans a rushing stream ahead, but several planks look rotten.`,
+      choices: [
+        { text: "Cross the bridge carefully", next: "bridgeCrossing" },
+        { text: "Search for another way across", next: "findFord" },
+        { text: "Turn back to the forest edge", next: "start" }
+      ]
+    },
+    // Additional story pages would continue here...
+    wolfBread: {
+      title: "An Unlikely Friend",
+      image: "https://source.unsplash.com/random/800x400/?wolf,forest",
+      text: `The wolf sniffs the bread cautiously before taking it gently from your hand. To your surprise, it nuzzles your palm afterward. The wolf turns and disappears into the bushes, but you notice it leaves behind a silver key.`,
+      choices: [
+        { text: "Take the key and continue", next: "silverKeyPath", gain: "silver_key" },
+        { text: "Leave the key and go back", next: "start" }
+      ],
+      inventory: ["silver_key"]
+    },
+    ending: {
+      title: "Journey's End",
+      image: "https://source.unsplash.com/random/800x400/?treasure,chest",
+      text: `Congratulations ${localStorage.getItem('playerName') || 'adventurer'}! You've completed this chapter of the Enchanted Forest. Your courage and wisdom have brought you safely through the woods. More adventures await...`,
+      choices: [
+        { text: "Play again", next: "start" }
+      ]
+    }
+  };
+
+  // Player state
+  const player = {
+    inventory: ["bread", "water", "tinderbox"],
+    currentPage: "start"
+  };
+
+  // When the DOM is fully loaded
+  document.addEventListener("DOMContentLoaded", () => {
+    // Load player name
+    const name = localStorage.getItem('playerName') || "Player";
+    document.getElementById("profileName").textContent = name + " ▼";
+
+    // Start the story
+    renderPage(story.start);
+  });
+
+  // Render a story page
+  function renderPage(page) {
+    const contentBox = document.getElementById("storyContent");
+    player.currentPage = page;
+
+    // Create HTML for the page
+    let html = `
+        <h2>${page.title}</h2>
+        <img src="${page.image}" class="story-image" alt="${page.title}">
+        <p>${page.text}</p>
+      `;
+
+    // Show inventory if not empty
+    if (player.inventory.length > 0) {
+      html += `<div class="inventory"><strong>Inventory:</strong> `;
+      html += player.inventory.map(item => `<span>${item}</span>`).join('');
+      html += `</div>`;
+    }
+
+    // Add choices
+    page.choices.forEach(choice => {
+      html += `<button class="choice-btn" onclick="makeChoice('${choice.next}')">${choice.text}</button>`;
     });
-  </script>
+
+    // Add back button (except on start page)
+    if (page !== story.start) {
+      html += `<button class="back-btn" onclick="goBack()">← Back</button>`;
+    }
+
+    contentBox.innerHTML = html;
+  }
+
+  // Handle player choice
+  function makeChoice(nextPageId) {
+    const nextPage = story[nextPageId];
+
+    // Check if this choice grants an item
+    const currentChoices = story[player.currentPage].choices;
+    const selectedChoice = currentChoices.find(c => c.next === nextPageId);
+
+    if (selectedChoice && selectedChoice.gain) {
+      if (!player.inventory.includes(selectedChoice.gain)) {
+        player.inventory.push(selectedChoice.gain);
+      }
+    }
+
+    renderPage(nextPage);
+  }
+
+  // Go back to previous page
+  function goBack() {
+    // Simple implementation - returns to start
+    // In a full implementation, you might track navigation history
+    renderPage(story.start);
+  }
+</script>
 </body>
 </html>
