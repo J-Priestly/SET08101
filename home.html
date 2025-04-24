@@ -1,113 +1,559 @@
 <!DOCTYPE html>
+<!-- Declares HTML5 document type -->
 <html lang="en">
+<!-- Root element with English language specification -->
 <head>
+  <!-- Document metadata and resources -->
   <meta charset="UTF-8" />
+  <!-- Character encoding declaration -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Home</title>
+  <!-- Responsive viewport settings -->
+  <title>Story Game Hub</title>
+  <!-- Page title shown in browser tab -->
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      background: #f4f4f4;
+    /* CSS variables for easy theming */
+    :root {
+      --primary: #4a6fa5;       /* Main brand color */
+      --secondary: #166088;     /* Secondary color */
+      --light: #f8f9fa;         /* Light background */
+      --dark: #343a40;          /* Dark text color */
+      --success: #28a745;       /* Success/green color */
     }
 
+    /* Base body styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: var(--light);
+      color: var(--dark);
+      transition: all 0.3s ease; /* Smooth theme transition */
+    }
+
+    /* Dark mode styles */
+    body.dark-mode {
+      background: #1a1a1a;
+      color: #f0f0f0;
+    }
+
+    /* Navigation bar styles */
     .navbar {
-      background: #333;
+      background: var(--primary);
       color: white;
-      padding: 1rem;
+      padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
+    /* Dropdown menu styles */
     .dropdown {
       position: relative;
       display: inline-block;
     }
 
+    /* Dropdown content (hidden by default) */
     .dropdown-content {
       display: none;
       position: absolute;
       right: 0;
-      background-color: #f9f9f9;
-      min-width: 120px;
+      background-color: var(--light);
+      min-width: 160px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       z-index: 1;
+      border-radius: 5px;
+      overflow: hidden;
     }
 
+    /* Dark mode dropdown adjustments */
+    .dark-mode .dropdown-content {
+      background-color: #333;
+    }
+
+    /* Show dropdown on hover */
     .dropdown:hover .dropdown-content {
       display: block;
     }
 
+    /* Dropdown menu items */
     .dropdown-content a {
-      color: black;
-      padding: 10px 14px;
+      color: var(--dark);
+      padding: 12px 16px;
       text-decoration: none;
       display: block;
+      transition: background 0.2s;
     }
 
+    /* Dark mode dropdown items */
+    .dark-mode .dropdown-content a {
+      color: #f0f0f0;
+    }
+
+    /* Dropdown item hover effect */
     .dropdown-content a:hover {
-      background-color: #f1f1f1;
+      background-color: rgba(0,0,0,0.1);
     }
 
+    /* Dark mode dropdown hover */
+    .dark-mode .dropdown-content a:hover {
+      background-color: rgba(255,255,255,0.1);
+    }
+
+    /* Main content container */
     .container {
-      max-width: 800px;
-      margin: 2rem auto;
-      text-align: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
     }
 
-    .card {
+    /* Hero section styles */
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 4rem 2rem;
+      text-align: center;
+      border-radius: 0 0 20px 20px;
+      margin-bottom: 2rem;
+    }
+
+    /* Hero heading */
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* Hero paragraph */
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+
+    /* Base button styles */
+    .btn {
+      display: inline-block;
       background: white;
-      padding: 1rem 2rem;
-      border-radius: 8px;
-      margin: 1rem 0;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      text-align: left;
+      color: var(--primary);
+      padding: 0.8rem 1.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s;
+      border: none;
       cursor: pointer;
     }
 
+    /* Button hover effects */
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Primary button variant */
+    .btn-primary {
+      background: white;
+      color: var(--primary);
+    }
+
+    /* Outline button variant */
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+      margin-left: 1rem;
+    }
+
+    /* Outline button hover */
+    .btn-outline:hover {
+      background: white;
+      color: var(--primary);
+    }
+
+    /* Search container */
+    .search-container {
+      margin: 2rem auto;
+      max-width: 600px;
+    }
+
+    /* Search bar layout */
+    .search-bar {
+      display: flex;
+      background: white;
+      border-radius: 50px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+
+    /* Dark mode search bar */
+    .dark-mode .search-bar {
+      background: #333;
+    }
+
+    /* Search input field */
+    .search-bar input {
+      flex: 1;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    /* Dark mode search input */
+    .dark-mode .search-bar input {
+      background: #333;
+      color: white;
+    }
+
+    /* Search button */
+    .search-bar button {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0 1.5rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    /* Search button hover */
+    .search-bar button:hover {
+      background: var(--secondary);
+    }
+
+    /* Stories grid layout */
+    .stories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+
+    /* Story card styles */
+    .card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    /* Dark mode card */
+    .dark-mode .card {
+      background: #2d2d2d;
+    }
+
+    /* Card hover effect */
     .card:hover {
-      background-color: #f0f0f0;
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Card image container */
+    .card-image {
+      height: 150px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Card content area */
+    .card-content {
+      padding: 1.5rem;
+    }
+
+    /* Card title */
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Card description */
+    .card p {
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    /* Dark mode card text */
+    .dark-mode .card p {
+      color: #aaa;
+    }
+
+    /* Progress container */
+    .progress-container {
+      margin: 3rem 0;
+    }
+
+    /* Progress bar background */
+    .progress-bar {
+      height: 8px;
+      background: #e9ecef;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+      overflow: hidden;
+    }
+
+    /* Dark mode progress bar */
+    .dark-mode .progress-bar {
+      background: #333;
+    }
+
+    /* Progress indicator */
+    .progress {
+      height: 100%;
+      background: var(--success);
+      width: 0%;
+      transition: width 0.5s;
+    }
+
+    /* Theme toggle button */
+    .theme-toggle {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      margin-left: 1rem;
+    }
+
+    /* Tag/chip styles */
+    .tag {
+      display: inline-block;
+      background: rgba(74, 111, 165, 0.1);
+      color: var(--primary);
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Dark mode tags */
+    .dark-mode .tag {
+      background: rgba(74, 111, 165, 0.3);
+    }
+
+    /* Responsive adjustments for smaller screens */
+    @media (max-width: 768px) {
+      .hero {
+        padding: 3rem 1rem;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .btn-outline {
+        margin-left: 0;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <div id="siteName">Story Game</div>
+<!-- Navigation Bar -->
+<div class="navbar">
+  <div id="siteName">Story Game Hub</div>
+  <div style="display: flex; align-items: center;">
+    <!-- Dark mode toggle button -->
+    <button class="theme-toggle" onclick="toggleDarkMode()">
+      <i class="fas fa-moon"></i>
+    </button>
+    <!-- Profile dropdown -->
     <div class="dropdown">
-      <span id="profileName">Profile ▼</span>
+      <span id="profileName">Player ▼</span>
       <div class="dropdown-content">
-        <a href="settings.html">Settings</a>
-        <a href="#" onclick="logout()">Logout</a>
+        <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
       </div>
     </div>
   </div>
+</div>
 
+<!-- Hero Section -->
+<div class="hero">
   <div class="container">
-    <h2>Welcome back, <span id="playerName">Player</span></h2>
-    <p>Select a story to begin:</p>
+    <h1>Embark on New Adventures</h1>
+    <p>Discover interactive stories where your choices shape the narrative. Continue your journey or start a brand new tale.</p>
+    <div class="btn-group">
+      <a href="#stories" class="btn btn-primary">Browse Stories</a>
+      <a href="#" class="btn btn-outline">Your Progress</a>
+    </div>
+  </div>
+</div>
 
-    <div class="card" onclick="startStory('story1')">
-      <strong>Story 1</strong>
-      <p>The journey begins in a mysterious forest.</p>
+<!-- Main Content -->
+<div class="container">
+  <!-- Search Bar -->
+  <div class="search-container">
+    <div class="search-bar">
+      <input type="text" placeholder="Search for stories..." id="searchInput">
+      <button><i class="fas fa-search"></i></button>
     </div>
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const name = localStorage.getItem('playerName') || "Player";
-      document.getElementById("playerName").textContent = name;
-      document.getElementById("profileName").textContent = name + " ▼";
+  <!-- Progress Tracker -->
+  <div class="progress-container">
+    <h3>Your Progress</h3>
+    <p>You've completed <span id="completedStories">0</span> out of <span id="totalStories">5</span> stories</p>
+    <div class="progress-bar">
+      <div class="progress" id="progressBar"></div>
+    </div>
+  </div>
+
+  <!-- Stories Section -->
+  <h2 id="stories">Featured Stories</h2>
+  <div class="stories-grid" id="storiesGrid">
+    <!-- Story cards will be added dynamically by JavaScript -->
+  </div>
+</div>
+
+<script>
+  // Sample story data - in a real app this would come from a database
+  const stories = [
+    {
+      id: 'story1',
+      title: 'The Enchanted Forest',
+      description: 'Your journey begins in a mysterious forest where every path leads to new wonders and dangers.',
+      image: 'https://source.unsplash.com/random/600x400/?forest,fantasy',
+      tags: ['Fantasy', 'Adventure'],
+      completed: false
+    },
+    {
+      id: 'story2',
+      title: 'Space Odyssey',
+      description: 'Command your crew through the cosmos, making tough decisions that determine humanity\'s future among the stars.',
+      image: 'https://source.unsplash.com/random/600x400/?space,sci-fi',
+      tags: ['Sci-Fi', 'Space'],
+      completed: true
+    },
+    {
+      id: 'story3',
+      title: 'Detective Chronicles',
+      description: 'Solve the murder mystery in 1940s New York using your wits and attention to detail.',
+      image: 'https://source.unsplash.com/random/600x400/?detective,noir',
+      tags: ['Mystery', 'Noir'],
+      completed: false
+    },
+    {
+      id: 'story4',
+      title: 'Zombie Apocalypse',
+      description: 'Survive the undead outbreak by making strategic choices about resources and allies.',
+      image: 'https://source.unsplash.com/random/600x400/?zombie,apocalypse',
+      tags: ['Horror', 'Survival'],
+      completed: false
+    },
+    {
+      id: 'story5',
+      title: 'Royal Intrigue',
+      description: 'Navigate the dangerous politics of a medieval court where everyone has hidden agendas.',
+      image: 'https://source.unsplash.com/random/600x400/?castle,medieval',
+      tags: ['Historical', 'Drama'],
+      completed: false
+    }
+  ];
+
+  // When the DOM is fully loaded
+  document.addEventListener("DOMContentLoaded", () => {
+    // Load player name from localStorage or use default
+    const name = localStorage.getItem('playerName') || "Player";
+    document.getElementById("profileName").textContent = name + " ▼";
+
+    // Check for saved dark mode preference
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      document.body.classList.add('dark-mode');
+      document.querySelector('.theme-toggle i').className = 'fas fa-sun';
+    }
+
+    // Initially render all stories
+    renderStories();
+
+    // Update progress tracker
+    updateProgress();
+
+    // Setup search functionality
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const filteredStories = stories.filter(story =>
+              story.title.toLowerCase().includes(searchTerm) ||
+              story.description.toLowerCase().includes(searchTerm) ||
+              story.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+      );
+      renderStories(filteredStories);
     });
+  });
 
-    function startStory(storyId) {
-      localStorage.setItem('currentPage', storyId + "/index.html");
-      window.location.href = storyId + "/index.html";
-    }
+  // Function to render stories to the page
+  function renderStories(storiesToRender = stories) {
+    const storiesGrid = document.getElementById('storiesGrid');
+    storiesGrid.innerHTML = ''; // Clear existing content
 
-    function logout() {
-      localStorage.clear();
-      window.location.href = "index.html";
+    // Create a card for each story
+    storiesToRender.forEach(story => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      // Card HTML template
+      card.innerHTML = `
+          <div class="card-image" style="background-image: url('${story.image}')"></div>
+          <div class="card-content">
+            <h3>${story.title}</h3>
+            <p>${story.description}</p>
+            <div>
+              ${story.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+            </div>
+            ${story.completed ? '<p><i class="fas fa-check-circle" style="color: var(--success)"></i> Completed</p>' : ''}
+          </div>
+        `;
+      // Add click handler to start story
+      card.addEventListener('click', () => startStory(story.id));
+      storiesGrid.appendChild(card);
+    });
+  }
+
+  // Update progress tracker
+  function updateProgress() {
+    const completed = stories.filter(story => story.completed).length;
+    const total = stories.length;
+    const percentage = (completed / total) * 100;
+
+    // Update DOM elements
+    document.getElementById('completedStories').textContent = completed;
+    document.getElementById('totalStories').textContent = total;
+    document.getElementById('progressBar').style.width = `${percentage}%`;
+  }
+
+  // Start a story - saves to localStorage and redirects
+  function startStory(storyId) {
+    localStorage.setItem('currentStory', storyId);
+    window.location.href = `${storyId}/index.html`;
+  }
+
+  // Logout - clears localStorage and redirects
+  function logout() {
+    localStorage.clear();
+    window.location.href = "index.html";
+  }
+
+  // Toggle dark/light mode
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    const icon = document.querySelector('.theme-toggle i');
+
+    if (document.body.classList.contains('dark-mode')) {
+      icon.className = 'fas fa-sun';
+      localStorage.setItem('darkMode', 'enabled');
+    } else {
+      icon.className = 'fas fa-moon';
+      localStorage.setItem('darkMode', 'disabled');
     }
-  </script>
+  }
+</script>
 </body>
 </html>

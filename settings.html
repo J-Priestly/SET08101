@@ -9,18 +9,55 @@
       font-family: Arial, sans-serif;
       margin: 0;
       background: #f4f4f4;
+      color: #333;
+      line-height: 1.6;
     }
 
-    .navbar {
+    header {
       background: #333;
       color: white;
       padding: 1rem;
       text-align: left;
     }
 
+    .settings-header {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .settings-header h1 {
+      color: #333;
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .contact-info {
+      text-align: center;
+      margin: 20px auto;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      max-width: 500px;
+      display: none;
+    }
+
+    .contact-info p {
+      margin: 10px 0;
+    }
+
+    .contact-info a {
+      color: #2196F3;
+      text-decoration: none;
+    }
+
+    .contact-info a:hover {
+      text-decoration: underline;
+    }
+
     .container {
       max-width: 600px;
-      margin: 4rem auto;
+      margin: 2rem auto;
       text-align: center;
     }
 
@@ -31,87 +68,241 @@
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
     input[type="text"] {
-      padding: 10px;
+      padding: 12px;
       font-size: 1rem;
       border-radius: 8px;
-      border: 1px solid #ccc;
+      border: 2px solid #ccc;
       width: 80%;
       margin-bottom: 20px;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus {
+      border-color: #2196F3;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
     }
 
     button {
-      padding: 10px 20px;
+      padding: 12px 24px;
       font-size: 1rem;
       border: none;
       border-radius: 8px;
-      background-color: #4caf50;
+      background-color: #2196F3;
       color: white;
       cursor: pointer;
-      margin: 5px;
+      margin: 8px;
+      transition: background-color 0.3s, transform 0.1s;
+      min-width: 120px;
     }
 
-    button:hover {
-      background-color: #45a049;
+    button:hover, button:focus {
+      background-color: #0b7dda;
+      transform: translateY(-2px);
+      outline: none;
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .notification {
+      background-color: #2196F3;
+      color: #fff;
+      padding: 12px;
+      margin-top: 15px;
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      background: #333;
+      color: white;
+      padding: 8px;
+      z-index: 100;
+    }
+
+    .skip-link:focus {
+      left: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        animation: none !important;
+      }
+
+      button:hover, button:focus {
+        transform: none !important;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 1rem;
+      }
+
+      input[type="text"] {
+        width: 90%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="navbar"><div>Story Game</div><div id="profileName">Profile ▼</div></div>
-  <div class="container">
-    <div class="content-box">
-      <h2>Settings</h2>
-      <p>Welcome, <span id="nameDisplay">Player</span></p>
-      <input type="text" id="nameInput" placeholder="Change your name" />
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<header class="navbar">
+  <div>Story Game</div>
+  <div id="profileName">Profile ▼</div>
+</header>
+
+<div class="settings-header">
+  <h1>Settings</h1>
+</div>
+
+<div class="container" id="main-content" tabindex="-1">
+  <div class="content-box">
+    <p>Welcome, <span id="nameDisplay">Player</span></p>
+    <form id="nameForm" onsubmit="event.preventDefault(); saveName();">
+      <label for="nameInput">Change your name:</label>
+      <input type="text" id="nameInput" placeholder="Enter your name" aria-label="Enter your name to update the profile" required />
       <br />
-      <button onclick="saveName()">Save Name</button>
-      <button onclick="toggleTheme()">Toggle Light/Dark Mode</button>
-      <br />
-      <button onclick="goBack()">← Back</button>
-    </div>
+      <button type="submit" aria-label="Save the new player name">Save Name</button>
+    </form>
+    <button onclick="toggleTheme()" aria-label="Toggle between light and dark mode">Toggle Light/Dark Mode</button>
+    <button onclick="toggleFontSize()" aria-label="Toggle font size between normal and large">Toggle Font Size</button>
+    <button onclick="toggleContrast()" aria-label="Toggle high contrast mode">Toggle High Contrast</button>
+    <button onclick="toggleContactInfo()" aria-label="Show contact information">Contact Us</button>
+    <br />
+    <button onclick="goBack()" aria-label="Go back to the previous page">← Back</button>
+    <div id="notification" class="notification" style="display:none;" role="alert" aria-live="assertive"></div>
   </div>
+</div>
 
-  <script>
-    const storedName = localStorage.getItem('playerName') || "Player";
-    document.getElementById('nameInput').value = storedName;
-    document.getElementById('nameDisplay').textContent = storedName;
+<div id="contactInfo" class="contact-info">
+  <p>Need help? Contact our support team:</p>
+  <p><strong>Phone:</strong> <a href="tel:+1234567890">(123) 456-7890</a></p>
+  <p><strong>Email:</strong> <a href="mailto:support@storygame.com">support@storygame.com</a></p>
+</div>
 
-    function saveName() {
-      const newName = document.getElementById('nameInput').value.trim();
-      if (newName) {
-        localStorage.setItem('playerName', newName);
-        document.getElementById('nameDisplay').textContent = newName;
-        alert("Name updated!");
-      }
+<script>
+  // Initialize settings with default values if not set
+  const storedName = localStorage.getItem('playerName') || "Player";
+  document.getElementById('nameInput').value = storedName;
+  document.getElementById('nameDisplay').textContent = storedName;
+
+  // Apply saved theme
+  applyTheme(localStorage.getItem('theme') || 'dark');
+
+  // Apply saved font size
+  applyFontSize(localStorage.getItem('fontSize') || 'normal');
+
+  // Apply saved contrast
+  applyContrast(localStorage.getItem('contrast') || 'normal');
+
+  function saveName() {
+    const newName = document.getElementById('nameInput').value.trim();
+    if (newName) {
+      localStorage.setItem('playerName', newName);
+      document.getElementById('nameDisplay').textContent = newName;
+      document.getElementById("profileName").textContent = newName + " ▼";
+      showNotification("Name updated successfully!");
     }
+  }
 
-    function goBack() {
-      window.location.href = "home.html";
+  function showNotification(message) {
+    const notification = document.getElementById('notification');
+    notification.textContent = message;
+    notification.style.display = 'block';
+    setTimeout(() => notification.style.display = 'none', 3000);
+  }
+
+  function goBack() {
+    window.location.href = "home.html";
+  }
+
+  function toggleContactInfo() {
+    const contactInfo = document.getElementById('contactInfo');
+    if (contactInfo.style.display === 'block') {
+      contactInfo.style.display = 'none';
+    } else {
+      contactInfo.style.display = 'block';
+      contactInfo.scrollIntoView({ behavior: 'smooth' });
     }
+  }
 
-    function applyTheme(theme) {
-      if (theme === 'light') {
-        document.body.style.background = '#ffffff';
-        document.body.style.color = '#000000';
-      } else {
-        document.body.style.background = '#f4f4f4';
-        document.body.style.color = '#000000';
-      }
+  function applyTheme(theme) {
+    if (theme === 'light') {
+      document.body.style.background = '#ffffff';
+      document.body.style.color = '#000000';
+      document.querySelector('.content-box').style.background = '#f8f8f8';
+    } else {
+      document.body.style.background = '#f4f4f4';
+      document.body.style.color = '#000000';
+      document.querySelector('.content-box').style.background = '#ffffff';
     }
+  }
 
-    function toggleTheme() {
-      const current = localStorage.getItem('theme') || 'dark';
-      const newTheme = current === 'dark' ? 'light' : 'dark';
-      localStorage.setItem('theme', newTheme);
-      applyTheme(newTheme);
+  function toggleTheme() {
+    const current = localStorage.getItem('theme') || 'dark';
+    const newTheme = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('theme', newTheme);
+    applyTheme(newTheme);
+    showNotification(`Theme changed to ${newTheme} mode`);
+  }
+
+  function applyFontSize(size) {
+    if (size === 'large') {
+      document.body.style.fontSize = '18px';
+    } else {
+      document.body.style.fontSize = '16px';
     }
+  }
 
-    applyTheme(localStorage.getItem('theme') || 'dark');
-  
-    document.addEventListener("DOMContentLoaded", () => {
-      const name = localStorage.getItem('playerName') || "Player";
-      document.getElementById("profileName").textContent = name + " ▼";
-    });
-    </script>
+  function toggleFontSize() {
+    const current = localStorage.getItem('fontSize') || 'normal';
+    const newSize = current === 'normal' ? 'large' : 'normal';
+    localStorage.setItem('fontSize', newSize);
+    applyFontSize(newSize);
+    showNotification(`Font size changed to ${newSize}`);
+  }
+
+  function applyContrast(mode) {
+    if (mode === 'high') {
+      document.body.style.background = '#000';
+      document.body.style.color = '#fff';
+      document.querySelector('.content-box').style.background = '#222';
+      document.querySelector('.content-box').style.color = '#fff';
+    } else {
+      // Revert to current theme settings
+      applyTheme(localStorage.getItem('theme') || 'dark');
+    }
+  }
+
+  function toggleContrast() {
+    const current = localStorage.getItem('contrast') || 'normal';
+    const newMode = current === 'normal' ? 'high' : 'normal';
+    localStorage.setItem('contrast', newMode);
+    applyContrast(newMode);
+    showNotification(`Contrast changed to ${newMode} mode`);
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const name = localStorage.getItem('playerName') || "Player";
+    document.getElementById("profileName").textContent = name + " ▼";
+
+    // Focus on the name input for keyboard users
+    document.getElementById("nameInput").focus();
+  });
+</script>
 </body>
 </html>

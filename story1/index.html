@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Story 1</title>
+  <title>The Enchanted Forest</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -27,37 +27,220 @@
       padding: 2rem;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: left;
     }
-    button {
+    .choice-btn {
+      display: block;
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 10px 20px;
+      background: #4a6fa5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.3s;
+    }
+    .choice-btn:hover {
+      background: #166088;
+    }
+    .back-btn {
       margin-top: 1rem;
       padding: 10px 20px;
-      background: #4caf50;
+      background: #6c757d;
       color: white;
       border: none;
       border-radius: 5px;
       cursor: pointer;
     }
+    .story-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+    }
   </style>
 </head>
 <body>
-  <div class="navbar">
-    <div>Story Game</div>
-    <div id="profileName">Profile ▼</div>
+<div class="navbar">
+  <div>Story Game</div>
+  <div id="profileName">Player ▼</div>
+</div>
+<div class="container">
+  <div class="content-box" id="storyContent">
+    <!-- Story content will be inserted here by JavaScript -->
   </div>
-  <div class="container">
-    <div class="content-box">
-      <h2>Story 1</h2>
-      <p id="playerName"></p>
-      <p>This story is currently blank.</p>
-      <button onclick="window.location.href='../home.html'">← Back</button>
-    </div>
-  </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const name = localStorage.getItem('playerName') || "Player";
-      document.getElementById("playerName").textContent = `Welcome, ${name}`;
-      document.getElementById("profileName").textContent = name + " ▼";
+</div>
+<script>
+  // Simple story structure
+  const storyPages = {
+    start: {
+      title: "The Enchanted Forest",
+      image: "https://images.unsplash.com/photo-1476231682828-37e571bc172f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "You stand at the edge of the Whispering Woods. The path splits three ways:",
+      choices: [
+        { text: "Take the sunlit eastern trail", next: "eastTrail" },
+        { text: "Follow the dark western path", next: "westTrail" },
+        { text: "Try the narrow northern track", next: "northTrail" }
+      ]
+    },
+    eastTrail: {
+      title: "Sunlit Clearing",
+      image: "https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "You enter a sunlit clearing with a mysterious stone at the center.",
+      choices: [
+        { text: "Examine the stone", next: "stoneExamined" },
+        { text: "Continue along the path", next: "river" },
+        { text: "Go back", next: "start" }
+      ]
+    },
+    westTrail: {
+      title: "Dark Path",
+      image: "https://images.unsplash.com/photo-1506318137071-a8e063b4bec0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "The path grows darker. You hear strange noises in the bushes.",
+      choices: [
+        { text: "Investigate the noise", next: "wolfEncounter" },
+        { text: "Quickly move forward", next: "cave" },
+        { text: "Retreat to safety", next: "start" }
+      ]
+    },
+    northTrail: {
+      title: "Hidden Path",
+      image: "https://images.unsplash.com/photo-1511497584788-876760111969?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "The narrow path leads to an ancient bridge over a rushing stream.",
+      choices: [
+        { text: "Cross the bridge", next: "bridge" },
+        { text: "Search for another way", next: "ford" },
+        { text: "Turn back", next: "start" }
+      ]
+    },
+    stoneExamined: {
+      title: "Mysterious Stone",
+      image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "The stone glows warmly in your hands. You feel a strange energy.",
+      choices: [
+        { text: "Keep the stone", next: "keepStone" },
+        { text: "Put it back", next: "eastTrail" }
+      ]
+    },
+    keepStone: {
+      title: "The Stone's Power",
+      image: "https://images.unsplash.com/photo-1531366936337-7c912a4589a7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "As you pocket the stone, you notice plants around you seem to respond to your presence. The path ahead splits again.",
+      choices: [
+        { text: "Follow the path deeper into the woods", next: "ancientTree" },
+        { text: "Return to the clearing's edge", next: "eastTrail" },
+        { text: "Test the stone's power on nearby plants", next: "plantAwakening" }
+      ]
+    },
+    ancientTree: {
+      title: "The Ancient Guardian",
+      image: "https://images.unsplash.com/photo-1518709766631-a6a7f45921cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "You come upon a massive, ancient tree. Its bark seems to form a face that slowly comes to life as you approach.",
+      choices: [
+        { text: "Show the stone to the tree", next: "treeCommunication" },
+        { text: "Hide the stone and walk past quietly", next: "treeAngry" },
+        { text: "Turn back", next: "keepStone" }
+      ]
+    },
+    treeCommunication: {
+      title: "Wisdom of the Ages",
+      image: "https://images.unsplash.com/photo-1503435980610-a51f3ddfee50?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "The tree's eyes glow as it recognizes the stone: 'Ah, the Heart of the Forest... It has chosen you. What wisdom do you seek?'",
+      choices: [
+        { text: "Ask about the stone's origin", next: "stoneOrigin" },
+        { text: "Ask for safe passage through the forest", next: "safePassage" },
+        { text: "Ask nothing and continue your journey", next: "forestHeart" }
+      ]
+    },
+    plantAwakening: {
+      title: "Nature Responds",
+      image: "https://images.unsplash.com/photo-1534766555763-4c40a13760d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "Holding the stone toward a bush, its leaves shimmer and rearrange to form words: 'Beware the shadow in the west.'",
+      choices: [
+        { text: "Investigate the western warning", next: "westTrail" },
+        { text: "Ask the plants more questions", next: "plantQuestions" },
+        { text: "Continue exploring the east", next: "river" }
+      ]
+    },
+    stoneOrigin: {
+      title: "The Stone's History",
+      image: "https://images.unsplash.com/photo-1518562180175-34a163b1a9a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "'The stone is a fragment of the first sunrise,' the tree rumbles. 'It can illuminate truth or blind the unworthy.'",
+      choices: [
+        { text: "Ask how to use its power", next: "stonePower" },
+        { text: "Thank the tree and continue", next: "forestHeart" },
+        { text: "Return the stone to the clearing", next: "returnStone" }
+      ]
+    },
+    forestHeart: {
+      title: "Heart of the Forest",
+      image: "https://images.unsplash.com/photo-1511497584788-876760111969?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "Guided by the stone's glow, you find yourself in a circular grove where all paths converge. A soft voice whispers from the air.",
+      choices: [
+        { text: "Present the stone to the voice", next: "forestSpirit" },
+        { text: "Keep the stone hidden", next: "spiritTest" },
+        { text: "Leave the grove quickly", next: "lostPath" }
+      ]
+    },
+    river: {
+      title: "Crystal River",
+      image: "https://images.unsplash.com/photo-1437482078695-73e5ca125a48?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
+      text: "You reach a beautiful crystal-clear river blocking your path.",
+      choices: [
+        { text: "Try to swim across", next: "swim" },
+        { text: "Follow the riverbank", next: "riverbank" },
+        { text: "Go back", next: "eastTrail" }
+      ]
+    }
+  };
+
+  // Initialize the story
+  function initStory() {
+    // Load player name
+    const name = localStorage.getItem('playerName') || "Player";
+    document.getElementById("profileName").textContent = name + " ▼";
+
+    // Show the first page
+    showPage('start');
+  }
+
+  // Show a story page
+  function showPage(pageId) {
+    const page = storyPages[pageId];
+    if (!page) {
+      console.error("Page not found:", pageId);
+      return;
+    }
+
+    const contentBox = document.getElementById("storyContent");
+    let html = `
+        <h2>${page.title}</h2>
+        <img src="${page.image}" class="story-image" alt="${page.title}">
+        <p>${page.text}</p>
+      `;
+
+    // Add choices
+    page.choices.forEach(choice => {
+      html += `
+          <button class="choice-btn" onclick="showPage('${choice.next}')">
+            ${choice.text}
+          </button>
+        `;
     });
-  </script>
+
+    // Add back button (except on start page)
+    if (pageId !== 'start') {
+      html += `<button class="back-btn" onclick="showPage('start')">← Back to Start</button>`;
+    }
+
+    contentBox.innerHTML = html;
+  }
+
+  // Start the story when page loads
+  window.onload = initStory;
+</script>
 </body>
 </html>
