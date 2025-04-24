@@ -5,6 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Settings</title>
   <style>
+  
+
+
+  
+  body.protanopia {
+    background: #f4f4f4;
+    color: #000;
+  }
+
+  body.protanopia .navbar {
+    background-color: #5a5a5a;
+    color: #fff;
+  }
+
+  body.deuteranopia {
+    background: #e9f5f9;
+    color: #000;
+  }
+
+  body.deuteranopia .navbar {
+    background-color: #406882;
+    color: #fff;
+  }
+
+  body.tritanopia {
+    background: #fff8f0;
+    color: #000;
+  }
+
+  body.tritanopia .navbar {
+    background-color: #5e4b56;
+    color: #fff;
+  }
+
+
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -66,12 +101,43 @@
       <br />
       <button onclick="saveName()">Save Name</button>
       <button onclick="toggleTheme()">Toggle Light/Dark Mode</button>
+		<button onclick="setColorblindMode('protanopia')">Protanopia Mode</button>
+		<button onclick="setColorblindMode('deuteranopia')">Deuteranopia Mode</button>
+		<button onclick="setColorblindMode('tritanopia')">Tritanopia Mode</button>
+
       <br />
       <button onclick="goBack()">← Back</button>
     </div>
   </div>
 
   <script>
+ 
+
+  function setColorblindMode(mode) {
+    localStorage.setItem('colorblindMode', mode);
+    applyColorblindTheme(mode);
+  }
+
+  function applyColorblindTheme(mode) {
+    document.body.classList.remove('protanopia', 'deuteranopia', 'tritanopia');
+    if (mode) {
+      document.body.classList.add(mode);
+    }
+  }
+
+  // Apply stored colorblind mode on load
+  const savedColorblindMode = localStorage.getItem('colorblindMode');
+  if (savedColorblindMode) {
+    applyColorblindTheme(savedColorblindMode);
+  }
+
+
+  
+  
+  
+  
+  
+  
     const storedName = localStorage.getItem('playerName') || "Player";
     document.getElementById('nameInput').value = storedName;
     document.getElementById('nameDisplay').textContent = storedName;
