@@ -61,6 +61,18 @@
       border-radius: 5px;
       margin-bottom: 1rem;
     }
+    #ttsBtn {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      padding: 9px 24px;
+      background: #26b24b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.15em;
+    }
+    #ttsBtn:hover { background: #128426; }
   </style>
 </head>
 <body>
@@ -197,17 +209,29 @@
     }
   };
 
-  // Initialize the story
-  function initStory() {
-    // Load player name
-    const name = localStorage.getItem('playerName') || "Player";
-    document.getElementById("profileName").textContent = name + " ▼";
-
-    // Show the first page
-    showPage('start');
+  // --- TTS function ---
+  function speakPage(pageId) {
+    const page = storyPages[pageId];
+    if (!page) return;
+    let text = `${page.title}. ${page.text} `;
+    if (page.choices && page.choices.length) {
+      page.choices.forEach((choice, i) => {
+        text += `Option ${i + 1}: ${choice.text}. `;
+      });
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    // Use preferred voice if set in localStorage (optional for future)
+    const voiceName = localStorage.getItem('ttsVoiceName');
+    if (voiceName) {
+      const voices = window.speechSynthesis.getVoices();
+      const match = voices.find(v => v.name === voiceName);
+      if (match) utterance.voice = match;
+    }
+    window.speechSynthesis.speak(utterance);
   }
 
-  // Show a story page
+  // Show a story page with a TTS button
   function showPage(pageId) {
     const page = storyPages[pageId];
     if (!page) {
@@ -217,18 +241,19 @@
 
     const contentBox = document.getElementById("storyContent");
     let html = `
-        <h2>${page.title}</h2>
-        <img src="${page.image}" class="story-image" alt="${page.title}">
-        <p>${page.text}</p>
-      `;
+      <button id="ttsBtn" onclick="speakPage('${pageId}')">🔊 Listen</button>
+      <h2>${page.title}</h2>
+      <img src="${page.image}" class="story-image" alt="${page.title}">
+      <p>${page.text}</p>
+    `;
 
     // Add choices
     page.choices.forEach(choice => {
       html += `
-          <button class="choice-btn" onclick="showPage('${choice.next}')">
-            ${choice.text}
-          </button>
-        `;
+        <button class="choice-btn" onclick="showPage('${choice.next}')">
+          ${choice.text}
+        </button>
+      `;
     });
 
     // Add back button (except on start page)
@@ -240,6 +265,17 @@
   }
 
   // Start the story when page loads
+  function initStory() {
+    // Load player name
+    const name = localStorage.getItem('playerName') || "Player";
+    document.getElementById("profileName").textContent = name + " ▼";
+    showPage('start');
+  }
+
+  // Expose functions globally for button use
+  window.speakPage = speakPage;
+  window.showPage = showPage;
+
   window.onload = initStory;
 </script>
 </body>
