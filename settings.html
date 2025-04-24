@@ -120,6 +120,7 @@
       margin-top: 15px;
       border-radius: 5px;
       text-align: center;
+      display: none;
     }
 
     .skip-link {
@@ -184,7 +185,14 @@
     <button onclick="toggleContactInfo()" aria-label="Show contact information">Contact Us</button>
     <br />
     <button onclick="goBack()" aria-label="Go back to the previous page">← Back</button>
-    <div id="notification" class="notification" style="display:none;" role="alert" aria-live="assertive"></div>
+    <div id="notification" class="notification" role="alert" aria-live="assertive"></div>
+    <hr />
+    <!-- TTS Settings -->
+    <label for="voiceSelect">Preferred Voice for Narration:</label>
+    <select id="voiceSelect" aria-label="Select the TTS voice"></select>
+    <br />
+    <button onclick="saveVoice()">Save Voice</button>
+    <button onclick="testVoice()">Test Voice</button>
   </div>
 </div>
 
@@ -199,7 +207,8 @@
   const storedName = localStorage.getItem('playerName') || "Player";
   document.getElementById('nameInput').value = storedName;
   document.getElementById('nameDisplay').textContent = storedName;
-
+  document.getElementById('profileName').textContent = storedName + " ▼";
+  
   // Apply saved theme
   applyTheme(localStorage.getItem('theme') || 'dark');
 
@@ -283,7 +292,6 @@
       document.querySelector('.content-box').style.background = '#222';
       document.querySelector('.content-box').style.color = '#fff';
     } else {
-      // Revert to current theme settings
       applyTheme(localStorage.getItem('theme') || 'dark');
     }
   }
@@ -296,16 +304,7 @@
     showNotification(`Contrast changed to ${newMode} mode`);
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    const name = localStorage.getItem('playerName') || "Player";
-    document.getElementById("profileName").textContent = name + " ▼";
-
-    // Focus on the name input for keyboard users
-    document.getElementById("nameInput").focus();
-  });
-
-
- // TTS: load voices, save and test
+  // TTS: load voices, save and test
   let voices = [];
   function loadVoices() {
     voices = window.speechSynthesis.getVoices();
