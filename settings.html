@@ -303,6 +303,25 @@
     // Focus on the name input for keyboard users
     document.getElementById("nameInput").focus();
   });
+
+
+ // TTS: load voices, save and test
+  let voices = [];
+  function loadVoices() {
+    voices = window.speechSynthesis.getVoices();
+    const sel = document.getElementById('voiceSelect');
+    sel.innerHTML = '';
+    voices.forEach(v => {
+      const opt = document.createElement('option'); opt.value = v.name;
+      opt.textContent = `${v.name} (${v.lang})${v.default? ' [default]': ''}`;
+      sel.appendChild(opt);
+    });
+    const saved = localStorage.getItem('ttsVoiceName'); if (saved) sel.value = saved;
+  }
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+  function saveVoice() { const v = document.getElementById('voiceSelect').value; localStorage.setItem('ttsVoiceName', v); showNotification('Voice preference saved!'); }
+  function testVoice() { const utter = new SpeechSynthesisUtterance('This is a test of the selected voice.'); const vname = localStorage.getItem('ttsVoiceName') || document.getElementById('voiceSelect').value; const v = voices.find(x=>x.name===vname); if(v) utter.voice=v; window.speechSynthesis.speak(utter); }
+  document.addEventListener('DOMContentLoaded', loadVoices);
 </script>
 </body>
 </html>
