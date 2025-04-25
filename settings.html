@@ -4,323 +4,414 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Settings</title>
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
   <style>
+    :root {
+      --primary: #4a6fa5;
+      --secondary: #166088;
+      --light: #f8f9fa;
+      --dark: #343a40;
+      --text-light: #f0f0f0;
+      --text-lighter: #aaa;
+      --bg-dark: #1a1a1a;
+      --bg-card-dark: #2d2d2d;
+      --success: #28a745;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
-      background: #f4f4f4;
-      color: #333;
-      line-height: 1.6;
+      background: var(--light);
+      color: var(--dark);
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-light);
     }
 
-    header {
-      background: #333;
+    /* Navbar */
+    .navbar {
+      background: var(--primary);
       color: white;
-      padding: 1rem;
-      text-align: left;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
-    .settings-header {
-      text-align: center;
-      margin-top: 20px;
-    }
-
-    .settings-header h1 {
-      color: #333;
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-
-    .contact-info {
-      text-align: center;
-      margin: 20px auto;
-      padding: 15px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      max-width: 500px;
-      display: none;
-    }
-
-    .contact-info p {
-      margin: 10px 0;
-    }
-
-    .contact-info a {
-      color: #2196F3;
-      text-decoration: none;
-    }
-
-    .contact-info a:hover {
-      text-decoration: underline;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 2rem auto;
-      text-align: center;
-    }
-
-    .content-box {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-
-    input[type="text"] {
-      padding: 12px;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 2px solid #ccc;
-      width: 80%;
-      margin-bottom: 20px;
-      transition: border-color 0.3s;
-    }
-
-    input[type="text"]:focus {
-      border-color: #2196F3;
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
-    }
-
-    button {
-      padding: 12px 24px;
-      font-size: 1rem;
-      border: none;
-      border-radius: 8px;
-      background-color: #2196F3;
-      color: white;
-      cursor: pointer;
-      margin: 8px;
-      transition: background-color 0.3s, transform 0.1s;
-      min-width: 120px;
-    }
-
-    button:hover, button:focus {
-      background-color: #0b7dda;
-      transform: translateY(-2px);
-      outline: none;
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    .notification {
-      background-color: #2196F3;
-      color: #fff;
-      padding: 12px;
-      margin-top: 15px;
-      border-radius: 5px;
-      text-align: center;
-      display: none;
-    }
-
+    /* Skip link */
     .skip-link {
       position: absolute;
       left: -9999px;
       top: 0;
-      background: #333;
+      background: var(--primary);
       color: white;
-      padding: 8px;
+      padding: 0.5rem 1rem;
       z-index: 100;
     }
+    .skip-link:focus { left: 1rem; }
 
-    .skip-link:focus {
-      left: 0;
+    /* Page title */
+    .settings-header {
+      text-align: center;
+      margin: 2rem 0 1rem;
+    }
+    .settings-header h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: var(--dark);
+    }
+    body.dark-mode .settings-header h1 { color: var(--text-light); }
+
+    /* Container & card */
+    .container {
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      padding: 0 1rem;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      overflow: hidden;
+      transition: background 0.3s;
+    }
+    body.dark-mode .card { background: var(--bg-card-dark); }
+    .card-content {
+      padding: 2.5rem 2rem;
     }
 
-    @media (prefers-reduced-motion: reduce) {
-      * {
-        transition: none !important;
-        animation: none !important;
-      }
+    /* Text & labels */
+    .card-content p {
+      margin-bottom: 1.5rem;
+      color: var(--dark);
+      transition: color 0.3s;
+    }
+    body.dark-mode .card-content p { color: var(--text-light); }
 
-      button:hover, button:focus {
-        transform: none !important;
-      }
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: var(--dark);
+      transition: color 0.3s;
+    }
+    body.dark-mode label { color: var(--text-light); }
+
+    /* Form fields */
+    input[type="text"], select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 2px solid var(--secondary);
+      border-radius: 24px;
+      margin-bottom: 1.5rem;
+      outline: none;
+      background: white;
+      color: var(--dark);
+      transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    input::placeholder { color: var(--text-lighter); }
+
+    input:focus, select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(74,111,165,0.2);
+    }
+    body.dark-mode input, body.dark-mode select {
+      background: var(--bg-dark);
+      border-color: var(--secondary);
+      color: var(--text-light);
+    }
+    body.dark-mode input::placeholder { color: var(--text-lighter); }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 24px;
+      cursor: pointer;
+      margin: 0.25rem;
+      color: white;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .btn i { margin-right: 0.5rem; }
+    .btn-primary { background: var(--primary); }
+    .btn-toggle  { background: var(--secondary); }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
+    .btn:active { transform: translateY(0); }
+
+    /* Notification */
+    .notification {
+      background: var(--success);
+      color: white;
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
+      text-align: center;
+      display: none;
+      transition: background 0.3s;
+    }
+
+    /* Contact panel */
+    .contact-info {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      padding: 1.5rem 2rem;
+      max-width: 500px;
+      margin: 2rem auto;
+      display: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    body.dark-mode .contact-info {
+      background: var(--bg-card-dark);
+      color: var(--text-light);
+    }
+    .contact-info p { margin: 0.75rem 0; }
+    .contact-info a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .contact-info a:hover { text-decoration: underline; }
+
+    /* High-contrast overrides */
+    body.high-contrast {
+      background: #000 !important;
+      color: #fff !important;
+    }
+    body.high-contrast .navbar {
+      background: #000 !important;
+      color: #fff !important;
+    }
+    body.high-contrast .card,
+    body.high-contrast .contact-info {
+      background: #000 !important;
+      box-shadow: none !important;
+      border: 2px solid #fff;
+    }
+    body.high-contrast .card-content,
+    body.high-contrast .contact-info p,
+    body.high-contrast .settings-header h1 {
+      color: #fff !important;
+    }
+    body.high-contrast input,
+    body.high-contrast select {
+      background: #000 !important;
+      color: #fff !important;
+      border-color: #fff !important;
+    }
+    body.high-contrast input::placeholder {
+      color: #ccc !important;
+    }
+    body.high-contrast .btn-primary,
+    body.high-contrast .btn-toggle {
+      background: #fff !important;
+      color: #000 !important;
+      box-shadow: none !important;
+    }
+    body.high-contrast .btn:hover {
+      background: #fff !important;
+      color: #000 !important;
+      transform: none !important;
     }
 
     @media (max-width: 600px) {
-      .container {
-        margin: 1rem;
-      }
-
-      input[type="text"] {
-        width: 90%;
-      }
+      .container { margin: 1rem; }
     }
   </style>
 </head>
 <body>
-<a href="#main-content" class="skip-link">Skip to main content</a>
-<header class="navbar">
-  <div>Story Game</div>
-  <div id="profileName">Profile ▼</div>
-</header>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<div class="settings-header">
-  <h1>Settings</h1>
-</div>
+  <header class="navbar">
+    <div>Story Game</div>
+    <div id="profileName">Profile ▼</div>
+  </header>
 
-<div class="container" id="main-content" tabindex="-1">
-  <div class="content-box">
-    <p>Welcome, <span id="nameDisplay">Player</span></p>
-    <form id="nameForm" onsubmit="event.preventDefault(); saveName();">
-      <label for="nameInput">Change your name:</label>
-      <input type="text" id="nameInput" placeholder="Enter your name" aria-label="Enter your name to update the profile" required />
-      <br />
-      <button type="submit" aria-label="Save the new player name">Save Name</button>
-    </form>
-    <button onclick="toggleTheme()" aria-label="Toggle between light and dark mode">Toggle Light/Dark Mode</button>
-    <button onclick="toggleFontSize()" aria-label="Toggle font size between normal and large">Toggle Font Size</button>
-    <button onclick="toggleContrast()" aria-label="Toggle high contrast mode">Toggle High Contrast</button>
-    <button onclick="toggleContactInfo()" aria-label="Show contact information">Contact Us</button>
-    <br />
-    <button onclick="goBack()" aria-label="Go back to the previous page">← Back</button>
-    <div id="notification" class="notification" role="alert" aria-live="assertive"></div>
-    <hr />
-    <!-- TTS Settings -->
-    <label for="voiceSelect">Preferred Voice for Narration:</label>
-    <select id="voiceSelect" aria-label="Select the TTS voice"></select>
-    <br />
-    <button onclick="saveVoice()">Save Voice</button>
-    <button onclick="testVoice()">Test Voice</button>
+  <div class="settings-header">
+    <h1>Settings</h1>
   </div>
-</div>
 
-<div id="contactInfo" class="contact-info">
-  <p>Need help? Contact our support team:</p>
-  <p><strong>Phone:</strong> <a href="tel:+1234567890">(123) 456-7890</a></p>
-  <p><strong>Email:</strong> <a href="mailto:support@storygame.com">support@storygame.com</a></p>
-</div>
+  <div class="container" id="main-content" tabindex="-1">
+    <div class="card">
+      <div class="card-content content-box">
+        <p>Welcome, <strong id="nameDisplay">Player</strong></p>
 
-<script>
-  // Initialize settings with default values if not set
-  const storedName = localStorage.getItem('playerName') || "Player";
-  document.getElementById('nameInput').value = storedName;
-  document.getElementById('nameDisplay').textContent = storedName;
-  document.getElementById('profileName').textContent = storedName + " ▼";
-  
-  // Apply saved theme
-  applyTheme(localStorage.getItem('theme') || 'dark');
+        <form id="nameForm" onsubmit="event.preventDefault(); saveName();">
+          <label for="nameInput">Change your name:</label>
+          <input
+            type="text"
+            id="nameInput"
+            placeholder="Enter your name"
+            aria-label="Enter your name to update the profile"
+            required
+          />
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Name
+          </button>
+        </form>
 
-  // Apply saved font size
-  applyFontSize(localStorage.getItem('fontSize') || 'normal');
+        <div>
+          <button class="btn btn-toggle" onclick="toggleTheme()">
+            <i class="fas fa-adjust"></i> Theme
+          </button>
+          <button class="btn btn-toggle" onclick="toggleFontSize()">
+            <i class="fas fa-text-height"></i> Font
+          </button>
+          <button class="btn btn-toggle" onclick="toggleContrast()">
+            <i class="fas fa-highlighter"></i> Contrast
+          </button>
+          <button class="btn btn-toggle" onclick="toggleContactInfo()">
+            <i class="fas fa-info-circle"></i> Contact Us
+          </button>
+        </div>
 
-  // Apply saved contrast
-  applyContrast(localStorage.getItem('contrast') || 'normal');
+        <button class="btn btn-toggle" onclick="goBack()">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
 
-  function saveName() {
-    const newName = document.getElementById('nameInput').value.trim();
-    if (newName) {
-      localStorage.setItem('playerName', newName);
-      document.getElementById('nameDisplay').textContent = newName;
-      document.getElementById("profileName").textContent = newName + " ▼";
-      showNotification("Name updated successfully!");
+        <div id="notification" class="notification" role="alert" aria-live="assertive"></div>
+        <hr/>
+
+        <label for="voiceSelect">Preferred Voice for Narration:</label>
+        <select id="voiceSelect" aria-label="Select the TTS voice"></select>
+        <div>
+          <button class="btn btn-primary" onclick="saveVoice()">Save Voice</button>
+          <button class="btn btn-toggle" onclick="testVoice()">Test Voice</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="contactInfo" class="contact-info">
+    <p>Need help? Contact our support team:</p>
+    <p><strong>Phone:</strong> <a href="tel:+1234567890">(123) 456-7890</a></p>
+    <p><strong>Email:</strong> <a href="mailto:support@storygame.com">support@storygame.com</a></p>
+  </div>
+
+  <script>
+    // Initialization
+    const storedName = localStorage.getItem('playerName') || "Player";
+    document.getElementById('nameInput').value = storedName;
+    document.getElementById('nameDisplay').textContent = storedName;
+    document.getElementById('profileName').textContent = storedName + " ▼";
+
+    applyTheme(localStorage.getItem('theme') || 'dark');
+    applyFontSize(localStorage.getItem('fontSize') || 'normal');
+    applyContrast(localStorage.getItem('contrast') || 'normal');
+
+    // Name
+    function saveName() {
+      const newName = document.getElementById('nameInput').value.trim();
+      if (newName) {
+        localStorage.setItem('playerName', newName);
+        document.getElementById('nameDisplay').textContent = newName;
+        document.getElementById('profileName').textContent = newName + " ▼";
+        showNotification("Name updated successfully!");
+      }
     }
-  }
 
-  function showNotification(message) {
-    const notification = document.getElementById('notification');
-    notification.textContent = message;
-    notification.style.display = 'block';
-    setTimeout(() => notification.style.display = 'none', 3000);
-  }
-
-  function goBack() {
-    window.location.href = "home.html";
-  }
-
-  function toggleContactInfo() {
-    const contactInfo = document.getElementById('contactInfo');
-    if (contactInfo.style.display === 'block') {
-      contactInfo.style.display = 'none';
-    } else {
-      contactInfo.style.display = 'block';
-      contactInfo.scrollIntoView({ behavior: 'smooth' });
+    // Notifications
+    function showNotification(msg) {
+      const n = document.getElementById('notification');
+      n.textContent = msg;
+      n.style.display = 'block';
+      setTimeout(() => n.style.display = 'none', 3000);
     }
-  }
 
-  function applyTheme(theme) {
-    if (theme === 'light') {
-      document.body.style.background = '#ffffff';
-      document.body.style.color = '#000000';
-      document.querySelector('.content-box').style.background = '#f8f8f8';
-    } else {
-      document.body.style.background = '#f4f4f4';
-      document.body.style.color = '#000000';
-      document.querySelector('.content-box').style.background = '#ffffff';
+    // Navigation
+    function goBack() {
+      window.location.href = "home.html";
     }
-  }
-
-  function toggleTheme() {
-    const current = localStorage.getItem('theme') || 'dark';
-    const newTheme = current === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('theme', newTheme);
-    applyTheme(newTheme);
-    showNotification(`Theme changed to ${newTheme} mode`);
-  }
-
-  function applyFontSize(size) {
-    if (size === 'large') {
-      document.body.style.fontSize = '18px';
-    } else {
-      document.body.style.fontSize = '16px';
+    function toggleContactInfo() {
+      const ci = document.getElementById('contactInfo');
+      ci.style.display = ci.style.display === 'block' ? 'none' : 'block';
+      if (ci.style.display === 'block') ci.scrollIntoView({ behavior: 'smooth' });
     }
-  }
 
-  function toggleFontSize() {
-    const current = localStorage.getItem('fontSize') || 'normal';
-    const newSize = current === 'normal' ? 'large' : 'normal';
-    localStorage.setItem('fontSize', newSize);
-    applyFontSize(newSize);
-    showNotification(`Font size changed to ${newSize}`);
-  }
-
-  function applyContrast(mode) {
-    if (mode === 'high') {
-      document.body.style.background = '#000';
-      document.body.style.color = '#fff';
-      document.querySelector('.content-box').style.background = '#222';
-      document.querySelector('.content-box').style.color = '#fff';
-    } else {
-      applyTheme(localStorage.getItem('theme') || 'dark');
+    // Theme
+    function applyTheme(theme) {
+      document.body.classList.toggle('dark-mode', theme === 'dark');
     }
-  }
+    function toggleTheme() {
+      const curr = localStorage.getItem('theme') || 'dark';
+      const next = curr === 'dark' ? 'light' : 'dark';
+      localStorage.setItem('theme', next);
+      applyTheme(next);
+      showNotification(`Switched to ${next} mode`);
+    }
 
-  function toggleContrast() {
-    const current = localStorage.getItem('contrast') || 'normal';
-    const newMode = current === 'normal' ? 'high' : 'normal';
-    localStorage.setItem('contrast', newMode);
-    applyContrast(newMode);
-    showNotification(`Contrast changed to ${newMode} mode`);
-  }
+    // Font Size
+    function applyFontSize(size) {
+      document.body.style.fontSize = size === 'large' ? '18px' : '16px';
+    }
+    function toggleFontSize() {
+      const curr = localStorage.getItem('fontSize') || 'normal';
+      const next = curr === 'normal' ? 'large' : 'normal';
+      localStorage.setItem('fontSize', next);
+      applyFontSize(next);
+      showNotification(`Font size: ${next}`);
+    }
 
-  // TTS: load voices, save and test
-  let voices = [];
-  function loadVoices() {
-    voices = window.speechSynthesis.getVoices();
-    const sel = document.getElementById('voiceSelect');
-    sel.innerHTML = '';
-    voices.forEach(v => {
-      const opt = document.createElement('option'); opt.value = v.name;
-      opt.textContent = `${v.name} (${v.lang})${v.default? ' [default]': ''}`;
-      sel.appendChild(opt);
-    });
-    const saved = localStorage.getItem('ttsVoiceName'); if (saved) sel.value = saved;
-  }
-  window.speechSynthesis.onvoiceschanged = loadVoices;
-  function saveVoice() { const v = document.getElementById('voiceSelect').value; localStorage.setItem('ttsVoiceName', v); showNotification('Voice preference saved!'); }
-  function testVoice() { const utter = new SpeechSynthesisUtterance('This is a test of the selected voice.'); const vname = localStorage.getItem('ttsVoiceName') || document.getElementById('voiceSelect').value; const v = voices.find(x=>x.name===vname); if(v) utter.voice=v; window.speechSynthesis.speak(utter); }
-  document.addEventListener('DOMContentLoaded', loadVoices);
-</script>
+    // Contrast
+    function applyContrast(mode) {
+      document.body.classList.toggle('high-contrast', mode === 'high');
+    }
+    function toggleContrast() {
+      const curr = localStorage.getItem('contrast') || 'normal';
+      const next = curr === 'normal' ? 'high' : 'normal';
+      localStorage.setItem('contrast', next);
+      applyContrast(next);
+      showNotification(`Contrast: ${next}`);
+    }
+
+    // TTS voices
+    let voices = [];
+    function loadVoices() {
+      voices = speechSynthesis.getVoices();
+      const sel = document.getElementById('voiceSelect');
+      sel.innerHTML = '';
+      voices.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v.name;
+        opt.textContent = `${v.name} (${v.lang})${v.default?' [default]':''}`;
+        sel.appendChild(opt);
+      });
+      const saved = localStorage.getItem('ttsVoiceName');
+      if (saved) sel.value = saved;
+    }
+    speechSynthesis.onvoiceschanged = loadVoices;
+
+    function saveVoice() {
+      const sel = document.getElementById('voiceSelect').value;
+      localStorage.setItem('ttsVoiceName', sel);
+      showNotification('Voice preference saved!');
+    }
+    function testVoice() {
+      const utt = new SpeechSynthesisUtterance('This is a test of the selected voice.');
+      const name = localStorage.getItem('ttsVoiceName') || document.getElementById('voiceSelect').value;
+      const v = voices.find(x => x.name === name);
+      if (v) utt.voice = v;
+      speechSynthesis.speak(utt);
+    }
+
+    document.addEventListener('DOMContentLoaded', loadVoices);
+  </script>
 </body>
 </html>
