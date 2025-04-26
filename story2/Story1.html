@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Whispers of the Verdant Maze</title>
+  <style>
+    body { font-family: 'Georgia', serif; margin: 0; background: #1e2e1e; color: #eee; padding: 2rem; }
+    .container { max-width: 800px; margin: auto; background: #2e3f2e; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); }
+    h2 { color: #a8d5a2; }
+    .choice-btn { display: block; margin-top: 1rem; padding: 10px; font-size: 1rem; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; text-align: left; }
+    .choice-btn:hover { background: #66bb6a; }
+    .back-btn { margin-top: 2rem; background: #888; }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2 id="scene-title">Scene 1: Awakening</h2>
+    <p id="scene-text">
+      You awaken beneath a twisted willow, your magical staff humming softly. The forest is silent. Mist weaves through the trees. A growl echoes from somewhere nearby.
+    </p>
+    <div id="choices"></div>
+    <button id="back-btn" class="choice-btn back-btn" style="display:none;">⬅️ Go Back</button>
+  </div>
+
+<script>
+let alignment = 0;
+let history = [];
+
+const scenes = {
+  start: {
+    title: "Scene 1: Awakening",
+    text: "You awaken beneath a twisted willow, your magical staff humming softly. The forest is silent. Mist weaves through the trees. A growl echoes from somewhere nearby.",
+    choices: [
+      { text: "Climb a Tree", next: "climbTree" },
+      { text: "Follow the Growl (Beast)", next: "beast" },
+      { text: "Head Toward the Sunlight (Runestone)", next: "runestone" },
+      { text: "Investigate a Strange Presence (Spirit)", next: "spirit" }
+    ]
+  },
+  climbTree: {
+    title: "Scene 2A: High Ground",
+    text: "You scale a tall oak. From the top, you spot strange ruins and a shimmer of magic beneath the roots. As you descend, a wraith attacks! You fend it off with your staff’s power.",
+    choices: [
+      { text: "Investigate the Ruins (Find Spells)", next: "spellChoice" },
+      { text: "Head Toward the Distant Clearing", next: "clearing" }
+    ]
+  },
+  spellChoice: {
+    title: "Scene: Skeleton's Grimoire",
+    text: "At the ruins’ center lies a skeleton clutching three ancient spellbooks. Which will you take?",
+    choices: [
+      { text: "☠️ Necromancer Spell", next: "afterSpell", spell: "necromancer" },
+      { text: "🌸 Flower Forest Spell", next: "afterSpell", spell: "flower"
+		btn.addEventListener('click', () => {
+        localStorage.setItem('flower', 'true');
+        showNext();
+	  }},
+      { text: "🌌 Portal Spell", next: "afterSpell", spell: "portal" }
+    ]
+  },
+  afterSpell: {
+    title: "Scene: New Power",
+    text: "The spellbook binds itself to your staff, whispering of power and destiny.",
+    choices: [
+      { text: "Head to the Distant Clearing", next: "clearing" }
+    ]
+  },
+  clearing: {
+    title: "Scene: The Forest Guardian",
+    text: "At last, you reach a vast clearing. An ancient Forest Guardian stirs awake, sensing your presence. It bellows: 'Prove your worth, traveler of paths!'",
+    choices: [
+      { text: "Appease the Guardian", next: "appeaseGuardian" },
+      { text: "Fight the Guardian", next: "battleGuardian" }
+    ]
+  },
+  appeaseGuardian: {
+    title: "Scene: Appease the Guardian",
+    text: "You approach the mighty Forest Guardian, who stands tall before you. It watches you with great eyes, awaiting your response.",
+    choices: [
+      { text: "Appease the Guardian", next: "appeaseGuardianChoice" }
+    ]
+  },
+  battleGuardian: {
+    title: "Scene: Final Battle",
+    text: "The Guardian roars as it prepares to strike. If the spirit was bound, it will break free and aid the Guardian. If the beast was freed, it will join you in the battle.",
+    choices: [
+      { text: "Fight With All Your Might", next: "endBattle" }
+    ]
+  },
+  endBattle: {
+    title: "Scene: Victory or Defeat",
+    text: "Victory! You leave the forest... for now.",
+    choices: [
+      { text: "The End", next: "start" }
+    ]
+  },
+  forestOpens: {
+    title: "Scene: The Forest Opens",
+    text: "The guardian steps aside, and you are free to leave the forest. The paths ahead are unknown, but you have earned your peace. The forest will remember your kindness forever.",
+    choices: [
+      { text: "The End", next: "start" }
+    ]
+  }
+};
+
+function addChoice(choice) {
+  const choicesDiv = document.getElementById("choices");
+  const choiceButton = document.createElement("button");
+  choiceButton.classList.add("choice-btn");
+  choiceButton.innerText = choice.text;
+  choiceButton.onclick = function() {
+    loadScene(choice.next);
+  };
+  choicesDiv.appendChild(choiceButton);
+}
+
+function loadScene(sceneName) {
+  const scene = scenes[sceneName];
+  document.getElementById("scene-title").innerText = scene.title;
+  document.getElementById("scene-text").innerText = scene.text;
+  
+  document.getElementById("choices").innerHTML = '';
+  scene.choices.forEach(choice => {
+    addChoice(choice);
+  });
+}
+
+function appeaseGuardianChoice() {
+  const flowerSpell = localStorage.getItem('flower');
+  
+  if (flowerSpell === 'true') {
+    document.getElementById("scene-text").innerText = "The Guardian steps aside, recognizing the magic of the flower spell you possess. The path is clear.";
+  } else {
+    document.getElementById("scene-text").innerText = "The Guardian hesitates but finally steps aside, allowing you to pass.";
+  }
+
+  addChoice({ text: "Continue", next: "forestOpens" });
+}
+
+function selectSpell(spell) {
+  if (spell === 'flower') {
+    localStorage.setItem('flower', 'true');
+  } else {
+    localStorage.removeItem('flower');
+  }
+  loadScene('afterSpell');
+}
+
+loadScene('start');
+</script>
+
+</body>
+</html>
