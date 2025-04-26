@@ -52,8 +52,8 @@ const scenes = {
     text: "At the ruins’ center lies a skeleton clutching three ancient spellbooks. Which will you take?",
     choices: [
       { text: "☠️ Necromancer Spell", next: "afterSpell", spell: "necromancer" },
-      { text: "🌸 Flower Forest Spell", next: "afterSpell", spell: "flower"
-		btn.addEventListener('click', () => {
+      { text: "🌸 Flower Forest Spell", next: "afterSpell", spell: "flower",
+	btn.addEventListener('click', () => {
         localStorage.setItem('flower', 'true');
         showNext();
 	  }},
