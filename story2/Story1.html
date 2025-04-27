@@ -25,8 +25,22 @@
   </div>
 
 <script>
-let alignment = 0;
+
 let history = [];
+let currentScene = 'start';
+
+let playerState = {
+  flower: false,
+  earthcall: false,
+  portal: false,
+  freedBeast: false,
+  boundSpirit: false,
+  freedSpirit: false,
+  strengthenedRunestone: false,
+  weakenedRunestone: false,
+  cruelChoice: false,
+  kindChoice: false
+};
 
 const scenes = {
   start: {
@@ -39,6 +53,7 @@ const scenes = {
       { text: "Investigate a Strange Presence (Spirit)", next: "spirit" }
     ]
   },
+
   climbTree: {
     title: "Scene 2A: High Ground",
     text: "You scale a tall oak. From the top, you spot strange ruins and a shimmer of magic beneath the roots. As you descend, a wraith attacks! You fend it off with your staff’s power.",
@@ -47,19 +62,17 @@ const scenes = {
       { text: "Head Toward the Distant Clearing", next: "clearing" }
     ]
   },
+
   spellChoice: {
     title: "Scene: Skeleton's Grimoire",
     text: "At the ruins’ center lies a skeleton clutching three ancient spellbooks. Which will you take?",
     choices: [
-      { text: "☠️ Necromancer Spell", next: "afterSpell", spell: "necromancer" },
-      { text: "🌸 Flower Forest Spell", next: "afterSpell", spell: "flower",
-	btn.addEventListener('click', () => {
-        localStorage.setItem('flower', 'true');
-        showNext();
-	  }},
+      { text: "🌎 EarthCall Spell", next: "afterSpell", spell: "earthcall" },
+      { text: "🌸 Flower Forest Spell", next: "afterSpell", spell: "flower" },
       { text: "🌌 Portal Spell", next: "afterSpell", spell: "portal" }
     ]
   },
+
   afterSpell: {
     title: "Scene: New Power",
     text: "The spellbook binds itself to your staff, whispering of power and destiny.",
@@ -67,6 +80,82 @@ const scenes = {
       { text: "Head to the Distant Clearing", next: "clearing" }
     ]
   },
+
+  beast: {
+    title: "Scene 2B: The Bound Beast",
+    text: "You find a massive creature chained by thorny vines. Its golden eyes plead with you. Free it... or leave it bound?",
+    choices: [
+      { text: "🌿 Free the Beast", next: "freeBeast" },
+      { text: "🔒 Leave It Bound", next: "leaveBeast" }
+    ]
+  },
+
+  freeBeast: {
+    title: "Scene: Freed Ally",
+    text: "You break the thorny chains. The beast nuzzles your hand in gratitude before disappearing into the trees. Perhaps it will return when you need it most.",
+    choices: [
+      { text: "Head to the Distant Clearing", next: "clearing" }
+    ]
+  },
+
+  leaveBeast: {
+    title: "Scene: Left in Chains",
+    text: "You turn away. The beast's sorrowful gaze lingers in your mind as you walk toward the clearing.",
+    choices: [
+      { text: "Head to the Distant Clearing", next: "clearing" }
+    ]
+  },
+
+  runestone: {
+    title: "Scene 2C: The Runestone",
+    text: "You find a massive runestone covered in glowing runes. You can channel your magic to strengthen its wards, or try to draw power from it.",
+    choices: [
+      { text: "🛡️ Strengthen the Wards (Protect the Forest)", next: "strengthenWards" },
+      { text: "⚡ Draw Power (Risk Awakening Something)", next: "drawPower" }
+    ]
+  },
+
+  strengthenWards: {
+    title: "Scene: Forest Protected",
+    text: "You pour your magic into the runestone. It glows warmly, and a peaceful energy settles across the forest. You feel lighter.",
+    choices: [
+      { text: "Head to the Distant Clearing", next: "clearing" }
+    ]
+  },
+
+  drawPower: {
+    title: "Scene: Wards Weakened",
+    text: "You greedily draw power from the stone. A ripple of unease spreads through the forest, and a shadow stirs beneath the earth...",
+    choices: [
+      { text: "Head to the Distant Clearing", next: "clearing" }
+    ]
+  },
+
+  spirit: {
+    title: "Scene 2D: The Captive Spirit",
+    text: "A spirit is trapped in a circle of mushrooms, humming with magic. Its eyes glimmer with fear. Will you free it or bind it tighter for your own use?",
+    choices: [
+      { text: "✨ Free the Spirit", next: "freeSpirit" },
+      { text: "🔗 Bind the Spirit", next: "bindSpirit" }
+    ]
+  },
+
+  freeSpirit: {
+    title: "Scene: Spirit Released",
+    text: "You disrupt the circle, releasing the spirit. It gives you a blessing before vanishing into the mist.",
+    choices: [
+      { text: "Head to the Distant Clearing", next: "clearing" }
+    ]
+  },
+
+  bindSpirit: {
+    title: "Scene: Spirit Bound",
+    text: "You tighten the circle's magic. The spirit shrieks but bends to your will. Dark magic swirls around your staff.",
+    choices: [
+      { text: "Head to the Distant Clearing", next: "clearing" }
+    ]
+  },
+
   clearing: {
     title: "Scene: The Forest Guardian",
     text: "At last, you reach a vast clearing. An ancient Forest Guardian stirs awake, sensing your presence. It bellows: 'Prove your worth, traveler of paths!'",
@@ -75,35 +164,49 @@ const scenes = {
       { text: "Fight the Guardian", next: "battleGuardian" }
     ]
   },
+
   appeaseGuardian: {
     title: "Scene: Appease the Guardian",
     text: "You approach the mighty Forest Guardian, who stands tall before you. It watches you with great eyes, awaiting your response.",
     choices: [
-      { text: "Appease the Guardian", next: "appeaseGuardianChoice" }
+      { text: "Attempt to Appease", next: "appeaseGuardianChoice" }
     ]
   },
-  battleGuardian: {
-    title: "Scene: Final Battle",
-    text: "The Guardian roars as it prepares to strike. If the spirit was bound, it will break free and aid the Guardian. If the beast was freed, it will join you in the battle.",
-    choices: [
-      { text: "Fight With All Your Might", next: "endBattle" }
-    ]
-  },
-  endBattle: {
-    title: "Scene: Victory or Defeat",
-    text: "Victory! You leave the forest... for now.",
-    choices: [
-      { text: "The End", next: "start" }
-    ]
-  },
+
   forestOpens: {
     title: "Scene: The Forest Opens",
     text: "The guardian steps aside, and you are free to leave the forest. The paths ahead are unknown, but you have earned your peace. The forest will remember your kindness forever.",
     choices: [
       { text: "The End", next: "start" }
     ]
+  },
+
+  guardianRefuses: {
+    title: "Scene: Refused Passage",
+    text: "The guardian sees the cruelty in your heart. 'You shall not pass,' it growls, and the earth itself rises against you.",
+    choices: [
+      { text: "Prepare to Fight!", next: "battleGuardian" }
+    ]
   }
 };
+
+
+function loadBattleGuardianScene() {
+  document.getElementById("scene-title").innerText = "Scene: Final Battle";
+  document.getElementById("scene-text").innerText = "The Guardian roars as it prepares to strike. Allies or foes you made may change your fate!";
+  
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = '';
+
+  addChoice({ text: "⚔️ Fight With All Your Might", next: "endBattle" });
+
+  if (playerState.portal) {
+    addChoice({ text: "🌌 Use the Portal Spell", next: "usePortal" });
+  }
+
+  const backBtn = document.getElementById("back-btn");
+  backBtn.style.display = history.length ? 'block' : 'none';
+}
 
 function addChoice(choice) {
   const choicesDiv = document.getElementById("choices");
@@ -111,45 +214,165 @@ function addChoice(choice) {
   choiceButton.classList.add("choice-btn");
   choiceButton.innerText = choice.text;
   choiceButton.onclick = function() {
-    loadScene(choice.next);
+    history.push(currentScene);
+    if (choice.spell) {
+      selectSpell(choice.spell);
+    } else {
+      handleSpecialChoices(choice.next);
+      loadScene(choice.next);
+    }
   };
   choicesDiv.appendChild(choiceButton);
 }
 
 function loadScene(sceneName) {
+  if (sceneName === 'appeaseGuardianChoice') {
+    appeaseGuardianChoice();
+    return;
+  }
+  if (sceneName === 'endBattle') {
+    resolveGuardianBattle();
+    return;
+  }
+  if (sceneName === 'usePortal') {
+    resolvePortalUse();
+    return;
+  }
+  if (sceneName === 'battleGuardian') {  
+    loadBattleGuardianScene();
+    return;
+  }
+
   const scene = scenes[sceneName];
+  currentScene = sceneName;
   document.getElementById("scene-title").innerText = scene.title;
   document.getElementById("scene-text").innerText = scene.text;
-  
-  document.getElementById("choices").innerHTML = '';
-  scene.choices.forEach(choice => {
-    addChoice(choice);
-  });
+
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = '';
+  scene.choices.forEach(choice => addChoice(choice));
+
+  const backBtn = document.getElementById("back-btn");
+  backBtn.style.display = history.length ? 'block' : 'none';
 }
 
-function appeaseGuardianChoice() {
-  const flowerSpell = localStorage.getItem('flower');
-  
-  if (flowerSpell === 'true') {
-    document.getElementById("scene-text").innerText = "The Guardian steps aside, recognizing the magic of the flower spell you possess. The path is clear.";
-  } else {
-    document.getElementById("scene-text").innerText = "The Guardian hesitates but finally steps aside, allowing you to pass.";
-  }
+//document.getElementById('back-btn').onclick = function() {
+  //const prev = history.pop();
+  //loadScene(prev);
+  document.getElementById('back-btn').onclick = function() {
+  history = [];
+  currentScene = 'start';
+  loadScene('start');
 
-  addChoice({ text: "Continue", next: "forestOpens" });
-}
+
+};
 
 function selectSpell(spell) {
-  if (spell === 'flower') {
-    localStorage.setItem('flower', 'true');
-  } else {
-    localStorage.removeItem('flower');
-  }
+  playerState.flower = (spell === 'flower');
+  playerState.earthcall = (spell === 'earthcall');
+  playerState.portal = (spell === 'portal');
   loadScene('afterSpell');
 }
 
-loadScene('start');
-</script>
+function handleSpecialChoices(nextScene) {
+  if (nextScene === 'freeBeast') {
+    playerState.freedBeast = true;
+    playerState.kindChoice = true;
+  }
+  if (nextScene === 'leaveBeast') {
+    playerState.cruelChoice = true;
+  }
+  if (nextScene === 'freeSpirit') {
+    playerState.freedSpirit = true;
+    playerState.kindChoice = true;
+  }
+  if (nextScene === 'bindSpirit') {
+    playerState.boundSpirit = true;
+    playerState.cruelChoice = true;
+  }
+  if (nextScene === 'strengthenWards') {
+    playerState.strengthenedRunestone = true;
+    playerState.kindChoice = true;
+  }
+  if (nextScene === 'drawPower') {
+    playerState.weakenedRunestone = true;
+    playerState.cruelChoice = true;
+  }
+}
 
+function appeaseGuardianChoice() {
+  if (playerState.flower) {
+    loadAppeaseSuccess();
+    return;
+  }
+  if (playerState.cruelChoice) {
+    loadScene('guardianRefuses');
+    return;
+  }
+  if (playerState.kindChoice) {
+    loadAppeaseSuccess();
+    return;
+  }
+  loadAppeaseSuccess();
+}
+
+function loadAppeaseSuccess() {
+  document.getElementById("scene-title").innerText = "Scene: Passage Earned";
+  document.getElementById("scene-text").innerText = "You have proven yourself to the Guardian.";
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = '';
+  addChoice({ text: "The End", next: "start" });
+}
+
+function resolvePortalUse() {
+  if (playerState.weakenedRunestone) {
+    document.getElementById("scene-title").innerText = "Scene: Portal Fails";
+    document.getElementById("scene-text").innerText = "You attempt to use the portal spell, but the runestone has been destroyed. The magic fizzles and the Guardian strikes you down!";
+    const choicesDiv = document.getElementById("choices");
+    choicesDiv.innerHTML = '';
+    addChoice({ text: "The End", next: "start" });
+  } else {
+    document.getElementById("scene-title").innerText = "Scene: Portal Used";
+    document.getElementById("scene-text").innerText = "You use the portal spell and escape the Guardian’s grasp.";
+    const choicesDiv = document.getElementById("choices");
+    choicesDiv.innerHTML = '';
+    addChoice({ text: "The End", next: "start" });
+  }
+}
+
+function resolveGuardianBattle() {
+  const choicesDiv = document.getElementById("choices");
+  choicesDiv.innerHTML = '';
+
+  if (playerState.freedBeast && playerState.earthcall) {
+    document.getElementById("scene-title").innerText = "Scene: Epic Rescue";
+    document.getElementById("scene-text").innerText = "The beast you freed howls into the sky, and an entire family of mighty creatures charges to your aid. The Guardian, overwhelmed, bows before your might.";
+    addChoice({ text: "The End", next: "start" });
+    return;
+  }
+
+  if (playerState.boundSpirit) {
+    document.getElementById("scene-title").innerText = "Scene: Betrayed";
+    document.getElementById("scene-text").innerText = "The spirit you bound turns against you in your hour of need. The Guardian seizes the moment to defeat you.";
+    addChoice({ text: "The End", next: "start" });
+    return;
+  }
+
+  if (playerState.freedBeast) {
+    document.getElementById("scene-title").innerText = "Scene: Beast's Loyalty";
+    document.getElementById("scene-text").innerText = "The beast you freed charges in, defending you against the Guardian. With its help, you claim victory!";
+    addChoice({ text: "The End", next: "start" });
+    return;
+  }
+
+  document.getElementById("scene-title").innerText = "Scene: Battle Lost";
+  document.getElementById("scene-text").innerText = "The battle rages on without aid. Despite your bravery, the Guardian overpowers you.";
+  addChoice({ text: "The End", next: "start" });
+}
+
+
+loadScene(currentScene);
+
+</script>
 </body>
 </html>
