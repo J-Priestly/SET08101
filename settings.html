@@ -5,37 +5,61 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Settings</title>
 
-  <!-- Font Awesome for icons -->
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+ 
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <filter id="protanopia">
+      <feColorMatrix type="matrix"
+        values="0.567 0.433 0     0 0
+                0.558 0.442 0     0 0
+                0     0.242 0.758 0 0
+                0     0     0     1 0"/>
+    </filter>
+    <filter id="deuteranopia">
+      <feColorMatrix type="matrix"
+        values="0.8     0.2     0      0 0
+                0.25833 0.74167 0      0 0
+                0       0.14167 0.85833 0 0
+                0       0       0      1 0"/>
+    </filter>
+    <filter id="tritanopia">
+      <feColorMatrix type="matrix"
+        values="0.95 0.05 0     0 0
+                0    0.433 0.567 0 0
+                0    0.475 0.525 0 0
+                0    0     0     1 0"/>
+    </filter>
+  </svg>
 
   <style>
     :root {
-      --primary: #4a6fa5;
-      --secondary: #166088;
-      --light: #f8f9fa;
-      --dark: #343a40;
-      --text-light: #f0f0f0;
-      --text-lighter: #aaa;
-      --bg-dark: #1a1a1a;
-      --bg-card-dark: #2d2d2d;
-      --success: #28a745;
+      --primary:    #4a6fa5;
+      --secondary:  #166088;
+      --light:      #f8f9fa;
+      --dark:       #343a40;
+      --success:    #28a745;
     }
-
     *, *::before, *::after { box-sizing: border-box; }
-
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       background: var(--light);
       color: var(--dark);
-      transition: background 0.3s, color 0.3s;
+      transition: all 0.3s ease;
     }
     body.dark-mode {
-      background: var(--bg-dark);
-      color: var(--text-light);
+      background: #1a1a1a;
+      color: #f0f0f0;
     }
+    body.high-contrast {
+      filter: contrast(1.5) brightness(1.1);
+    }
+    body.protanopia    { filter: url(#protanopia); }
+    body.deuteranopia { filter: url(#deuteranopia); }
+    body.tritanopia   { filter: url(#tritanopia); }
 
-    /* Navbar */
     .navbar {
       background: var(--primary);
       color: white;
@@ -45,8 +69,6 @@
       align-items: center;
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
-
-    /* Skip link */
     .skip-link {
       position: absolute;
       left: -9999px;
@@ -58,7 +80,6 @@
     }
     .skip-link:focus { left: 1rem; }
 
-    /* Page title */
     .settings-header {
       text-align: center;
       margin: 2rem 0 1rem;
@@ -68,9 +89,10 @@
       font-size: 2rem;
       color: var(--dark);
     }
-    body.dark-mode .settings-header h1 { color: var(--text-light); }
+    .dark-mode .settings-header h1 {
+      color: #f0f0f0;
+    }
 
-    /* Container & card */
     .container {
       max-width: 600px;
       margin: 0 auto 2rem;
@@ -81,20 +103,18 @@
       border-radius: 16px;
       box-shadow: 0 8px 24px rgba(0,0,0,0.06);
       overflow: hidden;
-      transition: background 0.3s;
+      transition: background 0.3s, filter 0.3s;
     }
-    body.dark-mode .card { background: var(--bg-card-dark); }
+    .dark-mode .card {
+      background: #2d2d2d;
+    }
+    .high-contrast .card {
+      box-shadow: none;
+      border: 2px solid #fff;
+    }
     .card-content {
       padding: 2.5rem 2rem;
     }
-
-    /* Text & labels */
-    .card-content p {
-      margin-bottom: 1.5rem;
-      color: var(--dark);
-      transition: color 0.3s;
-    }
-    body.dark-mode .card-content p { color: var(--text-light); }
 
     label {
       display: block;
@@ -103,10 +123,10 @@
       color: var(--dark);
       transition: color 0.3s;
     }
-    body.dark-mode label { color: var(--text-light); }
+    .dark-mode label { color: #f0f0f0; }
 
-    /* Form fields */
-    input[type="text"], select {
+    input[type="text"],
+    select {
       width: 100%;
       padding: 0.75rem 1rem;
       font-size: 1rem;
@@ -114,24 +134,41 @@
       border-radius: 24px;
       margin-bottom: 1.5rem;
       outline: none;
+      transition: background 0.3s, color 0.3s,
+                  border-color 0.3s, box-shadow 0.3s, filter 0.3s;
       background: white;
       color: var(--dark);
-      transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
     }
-    input::placeholder { color: var(--text-lighter); }
-
-    input:focus, select:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(74,111,165,0.2);
-    }
-    body.dark-mode input, body.dark-mode select {
-      background: var(--bg-dark);
+    .dark-mode input,
+    .dark-mode select {
+      background: #1a1a1a;
+      color: #f0f0f0;
       border-color: var(--secondary);
-      color: var(--text-light);
     }
-    body.dark-mode input::placeholder { color: var(--text-lighter); }
+    .high-contrast input,
+    .high-contrast select {
+      background: #000;
+      color: #fff;
+      border-color: #fff;
+    }
+    input::placeholder {
+      color: #999;
+    }
+    select optgroup, select option {
+      background: white;
+      color: var(--dark);
+    }
+    .dark-mode select optgroup,
+    .dark-mode select option {
+      background: #1a1a1a;
+      color: #f0f0f0;
+    }
+    .high-contrast select optgroup,
+    .high-contrast select option {
+      background: #000;
+      color: #fff;
+    }
 
-    /* Buttons */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -143,20 +180,32 @@
       border-radius: 24px;
       cursor: pointer;
       margin: 0.25rem;
-      color: white;
-      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      transition: background 0.2s, transform 0.2s,
+                  box-shadow 0.2s, filter 0.3s;
     }
     .btn i { margin-right: 0.5rem; }
-    .btn-primary { background: var(--primary); }
-    .btn-toggle  { background: var(--secondary); }
-
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+    .btn-toggle {
+      background: var(--secondary);
+      color: white;
+    }
+    .high-contrast .btn-primary,
+    .high-contrast .btn-toggle {
+      background: #fff;
+      color: #000;
+      box-shadow: none;
+    }
     .btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 18px rgba(0,0,0,0.1);
     }
-    .btn:active { transform: translateY(0); }
+    .btn:active {
+      transform: translateY(0);
+    }
 
-    /* Notification */
     .notification {
       background: var(--success);
       color: white;
@@ -165,101 +214,10 @@
       margin-top: 1rem;
       text-align: center;
       display: none;
-      transition: background 0.3s;
+      transition: filter 0.3s;
     }
 
-    /* Contact panel */
-    .contact-info {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
-      padding: 1.5rem 2rem;
-      max-width: 500px;
-      margin: 2rem auto;
-      display: none;
-      transition: background 0.3s, color 0.3s;
-    }
-    body.dark-mode .contact-info {
-      background: var(--bg-card-dark);
-      color: var(--text-light);
-    }
-    .contact-info p { margin: 0.75rem 0; }
-    .contact-info a {
-      color: var(--primary);
-      text-decoration: none;
-    }
-    .contact-info a:hover { text-decoration: underline; }
-
-    /* High-contrast overrides */
-    body.high-contrast {
-      background: #000 !important;
-      color: #fff !important;
-    }
-    body.high-contrast .navbar {
-      background: #000 !important;
-      color: #fff !important;
-    }
-    body.high-contrast .card,
-    body.high-contrast .contact-info {
-      background: #000 !important;
-      box-shadow: none !important;
-      border: 2px solid #fff;
-    }
-    body.high-contrast .card-content,
-    body.high-contrast .contact-info p,
-    body.high-contrast .settings-header h1 {
-      color: #fff !important;
-    }
-    body.high-contrast input,
-    body.high-contrast select {
-      background: #000 !important;
-      color: #fff !important;
-      border-color: #fff !important;
-    }
-    body.high-contrast input::placeholder {
-      color: #ccc !important;
-    }
-    body.high-contrast .btn-primary,
-    body.high-contrast .btn-toggle {
-      background: #fff !important;
-      color: #000 !important;
-      box-shadow: none !important;
-    }
-    body.high-contrast .btn:hover {
-      background: #fff !important;
-      color: #000 !important;
-      transform: none !important;
-    }
-
-     body.protanopia {
-    background: #f4f4f4;
-    color: #000;
-  }
-
-  body.protanopia .navbar {
-    background-color: #5a5a5a;
-    color: #fff;
-  }
-
-  body.deuteranopia {
-    background: #e9f5f9;
-    color: #000;
-  }
-
-  body.deuteranopia .navbar {
-    background-color: #406882;
-    color: #fff;
-  }
-
-  body.tritanopia {
-    background: #fff8f0;
-    color: #000;
-  }
-
-  body.tritanopia .navbar {
-    background-color: #5e4b56;
-    color: #fff;
-  }
+    .content-box { /* for JS contrast mode */ }
 
     @media (max-width: 600px) {
       .container { margin: 1rem; }
@@ -289,7 +247,6 @@
             type="text"
             id="nameInput"
             placeholder="Enter your name"
-            aria-label="Enter your name to update the profile"
             required
           />
           <button type="submit" class="btn btn-primary">
@@ -302,22 +259,30 @@
             <i class="fas fa-adjust"></i> Theme
           </button>
           <button class="btn btn-toggle" onclick="toggleFontSize()">
-            <i class="fas fa-text-height"></i> Font
+            <i class="fas fa-text-height"></i> Font Size
           </button>
           <button class="btn btn-toggle" onclick="toggleContrast()">
-            <i class="fas fa-highlighter"></i> Contrast
-          </button>
-          <button class="btn btn-toggle" onclick="toggleContactInfo()">
-            <i class="fas fa-info-circle"></i> Contact Us
-          </button>
-          <button onclick="setColourblindMode('protanopia')">Protanopia Mode
-          </button>
-		      <button onclick="setColourblindMode('deuteranopia')">Deuteranopia Mode
-          </button>
-		      <button onclick="setColourblindMode('tritanopia')">Tritanopia Mode
+            <i class="fas fa-highlighter"></i> High Contrast
           </button>
         </div>
 
+      
+        <form id="colourForm" onsubmit="event.preventDefault(); saveColourBlind();">
+          <label for="colourSelect">Colour-blind mode:</label>
+          <select id="colourSelect" aria-label="Select colour-blind simulation">
+            <option value="none">None</option>
+            <option value="protanopia">Protanopia</option>
+            <option value="deuteranopia">Deuteranopia</option>
+            <option value="tritanopia">Tritanopia</option>
+          </select>
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-eye"></i> Save Colour-Blind Mode
+          </button>
+        </form>
+
+        <button class="btn btn-toggle" onclick="toggleContactInfo()">
+          <i class="fas fa-info-circle"></i> Contact Us
+        </button>
         <button class="btn btn-toggle" onclick="goBack()">
           <i class="fas fa-arrow-left"></i> Back
         </button>
@@ -328,42 +293,53 @@
         <label for="voiceSelect">Preferred Voice for Narration:</label>
         <select id="voiceSelect" aria-label="Select the TTS voice"></select>
         <div>
-          <button class="btn btn-primary" onclick="saveVoice()">Save Voice</button>
-          <button class="btn btn-toggle" onclick="testVoice()">Test Voice</button>
+          <button class="btn btn-primary" onclick="saveVoice()">
+            <i class="fas fa-save"></i> Save Voice
+          </button>
+          <button class="btn btn-toggle" onclick="testVoice()">
+            <i class="fas fa-play"></i> Test Voice
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <div id="contactInfo" class="contact-info">
-    <p>Need help? Contact our support team:</p>
-    <p><strong>Phone:</strong> <a href="tel:+1234567890">(123) 456-7890</a></p>
-    <p><strong>Email:</strong> <a href="mailto:support@storygame.com">support@storygame.com</a></p>
+  <div id="contactInfo" class="card" style="margin:2rem auto; max-width:500px; display:none;">
+    <div class="card-content">
+      <p>Need help? Contact our support team:</p>
+      <p><strong>Phone:</strong> <a href="tel:+1234567890">(123) 456-7890</a></p>
+      <p><strong>Email:</strong> <a href="mailto:support@storygame.com">support@storygame.com</a></p>
+    </div>
   </div>
 
   <script>
-    // Initialization
-    const storedName = localStorage.getItem('playerName') || "Player";
-    document.getElementById('nameInput').value = storedName;
+   
+    const storedName = localStorage.getItem('playerName') || 'Player';
+    const storedTheme = localStorage.getItem('theme') || 'dark';
+    const storedFont  = localStorage.getItem('fontSize') || 'normal';
+    const storedContrast = localStorage.getItem('contrast') || 'normal';
+    const storedColour  = localStorage.getItem('colourBlind') || 'none';
+
+    document.getElementById('nameInput').value   = storedName;
     document.getElementById('nameDisplay').textContent = storedName;
-    document.getElementById('profileName').textContent = storedName + " ▼";
+    document.getElementById('profileName').textContent = storedName + ' ▼';
+    document.getElementById('colourSelect').value = storedColour;
 
-    applyTheme(localStorage.getItem('theme') || 'dark');
-    applyFontSize(localStorage.getItem('fontSize') || 'normal');
-    applyContrast(localStorage.getItem('contrast') || 'normal');
+    applyTheme(storedTheme);
+    applyFontSize(storedFont);
+    applyContrast(storedContrast);
+    applyColourBlind(storedColour);
 
-    // Name
+    
     function saveName() {
       const newName = document.getElementById('nameInput').value.trim();
-      if (newName) {
-        localStorage.setItem('playerName', newName);
-        document.getElementById('nameDisplay').textContent = newName;
-        document.getElementById('profileName').textContent = newName + " ▼";
-        showNotification("Name updated successfully!");
-      }
+      if (!newName) return;
+      localStorage.setItem('playerName', newName);
+      document.getElementById('nameDisplay').textContent = newName;
+      document.getElementById('profileName').textContent = newName + ' ▼';
+      showNotification('Name updated successfully!');
     }
 
-    // Notifications
     function showNotification(msg) {
       const n = document.getElementById('notification');
       n.textContent = msg;
@@ -371,53 +347,69 @@
       setTimeout(() => n.style.display = 'none', 3000);
     }
 
-    // Navigation
     function goBack() {
-      window.location.href = "home.html";
+      window.location.href = 'home.html';
     }
+
     function toggleContactInfo() {
       const ci = document.getElementById('contactInfo');
       ci.style.display = ci.style.display === 'block' ? 'none' : 'block';
-      if (ci.style.display === 'block') ci.scrollIntoView({ behavior: 'smooth' });
+      if (ci.style.display === 'block') ci.scrollIntoView({ behaviour: 'smooth' });
     }
 
-    // Theme
-    function applyTheme(theme) {
-      document.body.classList.toggle('dark-mode', theme === 'dark');
+    
+    function applyTheme(mode) {
+      document.body.classList.toggle('dark-mode', mode === 'dark');
     }
     function toggleTheme() {
-      const curr = localStorage.getItem('theme') || 'dark';
-      const next = curr === 'dark' ? 'light' : 'dark';
+      const next = document.body.classList.toggle('dark-mode') ? 'dark' : 'light';
       localStorage.setItem('theme', next);
       applyTheme(next);
-      showNotification(`Switched to ${next} mode`);
+      showNotification(`Theme changed to ${next}`);
     }
 
-    // Font Size
+   
     function applyFontSize(size) {
-      document.body.style.fontSize = size === 'large' ? '18px' : '16px';
+      document.body.style.fontSize = (size === 'large') ? '18px' : '16px';
     }
     function toggleFontSize() {
-      const curr = localStorage.getItem('fontSize') || 'normal';
-      const next = curr === 'normal' ? 'large' : 'normal';
+      const next = document.body.style.fontSize === '18px' ? 'normal' : 'large';
       localStorage.setItem('fontSize', next);
       applyFontSize(next);
-      showNotification(`Font size: ${next}`);
+      showNotification(`Font size changed to ${next}`);
     }
 
-    // Contrast
+
     function applyContrast(mode) {
       document.body.classList.toggle('high-contrast', mode === 'high');
     }
     function toggleContrast() {
-      const curr = localStorage.getItem('contrast') || 'normal';
-      const next = curr === 'normal' ? 'high' : 'normal';
+      const on = document.body.classList.toggle('high-contrast');
+      const next = on ? 'high' : 'normal';
       localStorage.setItem('contrast', next);
       applyContrast(next);
-      showNotification(`Contrast: ${next}`);
+      showNotification(`Contrast changed to ${next}`);
     }
 
-    // TTS voices
+   
+    function applyColourBlind(mode) {
+      ['protanopia','deuteranopia','tritanopia'].forEach(c =>
+        document.body.classList.toggle(c, c === mode)
+      );
+    }
+    function saveColourBlind() {
+      const sel = document.getElementById('colourSelect').value;
+      if (sel === 'none') {
+        ['protanopia','deuteranopia','tritanopia'].forEach(c => document.body.classList.remove(c));
+        localStorage.removeItem('colourBlind');
+      } else {
+        localStorage.setItem('colourBlind', sel);
+        applyColourBlind(sel);
+      }
+      showNotification(`Colour-blind mode: ${sel}`);
+    }
+
+  
     let voices = [];
     function loadVoices() {
       voices = speechSynthesis.getVoices();
@@ -432,40 +424,20 @@
       const saved = localStorage.getItem('ttsVoiceName');
       if (saved) sel.value = saved;
     }
-    speechSynthesis.onvoiceschanged = loadVoices;
-
     function saveVoice() {
-      const sel = document.getElementById('voiceSelect').value;
-      localStorage.setItem('ttsVoiceName', sel);
+      const v = document.getElementById('voiceSelect').value;
+      localStorage.setItem('ttsVoiceName', v);
       showNotification('Voice preference saved!');
     }
     function testVoice() {
       const utt = new SpeechSynthesisUtterance('This is a test of the selected voice.');
       const name = localStorage.getItem('ttsVoiceName') || document.getElementById('voiceSelect').value;
-      const v = voices.find(x => x.name === name);
-      if (v) utt.voice = v;
+      const voice = voices.find(x => x.name === name);
+      if (voice) utt.voice = voice;
       speechSynthesis.speak(utt);
     }
-
+    speechSynthesis.onvoiceschanged = loadVoices;
     document.addEventListener('DOMContentLoaded', loadVoices);
-
-     function setColorblindMode(mode) {
-    localStorage.setItem('colorblindMode', mode);
-    applyColorblindTheme(mode);
-  }
-
-  function applyColorblindTheme(mode) {
-    document.body.classList.remove('protanopia', 'deuteranopia', 'tritanopia');
-    if (mode) {
-      document.body.classList.add(mode);
-    }
-  }
-
-  // Apply stored colorblind mode on load
-  const savedColorblindMode = localStorage.getItem('colorblindMode');
-  if (savedColorblindMode) {
-    applyColorblindTheme(savedColorblindMode);
-  }
   </script>
 </body>
 </html>
