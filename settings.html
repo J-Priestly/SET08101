@@ -231,6 +231,36 @@
       transform: none !important;
     }
 
+     body.protanopia {
+    background: #f4f4f4;
+    color: #000;
+  }
+
+  body.protanopia .navbar {
+    background-color: #5a5a5a;
+    color: #fff;
+  }
+
+  body.deuteranopia {
+    background: #e9f5f9;
+    color: #000;
+  }
+
+  body.deuteranopia .navbar {
+    background-color: #406882;
+    color: #fff;
+  }
+
+  body.tritanopia {
+    background: #fff8f0;
+    color: #000;
+  }
+
+  body.tritanopia .navbar {
+    background-color: #5e4b56;
+    color: #fff;
+  }
+
     @media (max-width: 600px) {
       .container { margin: 1rem; }
     }
@@ -279,6 +309,12 @@
           </button>
           <button class="btn btn-toggle" onclick="toggleContactInfo()">
             <i class="fas fa-info-circle"></i> Contact Us
+          </button>
+          <button onclick="setColourblindMode('protanopia')">Protanopia Mode
+          </button>
+		      <button onclick="setColourblindMode('deuteranopia')">Deuteranopia Mode
+          </button>
+		      <button onclick="setColourblindMode('tritanopia')">Tritanopia Mode
           </button>
         </div>
 
@@ -412,6 +448,24 @@
     }
 
     document.addEventListener('DOMContentLoaded', loadVoices);
+
+     function setColorblindMode(mode) {
+    localStorage.setItem('colorblindMode', mode);
+    applyColorblindTheme(mode);
+  }
+
+  function applyColorblindTheme(mode) {
+    document.body.classList.remove('protanopia', 'deuteranopia', 'tritanopia');
+    if (mode) {
+      document.body.classList.add(mode);
+    }
+  }
+
+  // Apply stored colorblind mode on load
+  const savedColorblindMode = localStorage.getItem('colorblindMode');
+  if (savedColorblindMode) {
+    applyColorblindTheme(savedColorblindMode);
+  }
   </script>
 </body>
 </html>
