@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Best Friend</title>
+  <link rel="stylesheet" href="story5.css">
+</head>
+<body>
+<div class="navbar">
+  <div>Best Friend</div>
+  <div id="profileName">Player ▼</div>
+</div>
+<div class="container">
+  <div class="content-box" id="storyContent"></div>
+</div>
+<script>
+  const storyPages = {
+    start: {
+      title: "The Encounter",
+      image: "https://st4.depositphotos.com/2166177/22120/i/450/depositphotos_221209686-stock-photo-sad-dog-autumn-forest-old.jpg",
+      text: "You desire to enter the forest after hearing barks and whines",
+      choices: [
+        { text: "Run in with no regard for your life", next: "goAnimal" },
+        { text: "Start calling out to the animal", next: "firstEncounter" },
+        { text: "Dont enter the forest and leave the noisy animal", next: "runAway" }
+      ]
+    },
+    firstEncounter: {
+      title: "First encounter",
+      image: "https://media.istockphoto.com/id/1326917327/photo/a-beautiful-yellow-labrador-retriever-is-sitting-in-the-garden.jpg?s=612x612&w=0&k=20&c=fpIApwInP__UUmuYPQMcolDnuzrnCgoRrgJ7u7_rorE=",
+      text: "After calling out you suddenly hear a rush of footsteps tornadoing towards you, startled you slowly walk back. Out of the corner of your eye you see a dog with its tail up wagging its tail away",
+      choices: [
+        { text: "Call out to the dog in a puppy voice", next: "dogApproaches" },
+        { text: "Grab and throw a stick", next: "dogApproaches" },
+        { text: "Run away as you are allergic", next: "start" }
+      ]
+    },
+    goAnimal: {
+      title: "Friendly Revelation",
+      image: "https://st4.depositphotos.com/4079177/30586/i/1600/depositphotos_305866822-stock-photo-light-ginger-dog-looking-at.jpg",
+      text: "You see that the animal is a dog just like you thought, but it is clearly startled and does not trust you entirely after your whole running charade",
+      choices: [
+        { text: "Back away slowly and try calm the dog down", next: "dogApproaches" },
+        { text: "Prove yourself to not be a threat", next: "dogApproaches" }
+      ]
+    },
+    dogApproaches: {
+      title: "A new friend?",
+      image: "https://c.stocksy.com/a/elgH00/z9/4215978.jpg",
+      text: "The dog who is overwhelmedly excited grabs a stick and runs towards you ignoring everything else",
+      choices: [
+        { text: "You pet the cutie on its head and look for a collar on its neck", next: "checkCollar" }
+      ]
+    },
+    runAway: {
+      title: "Run Away",
+      image: "https://media.istockphoto.com/id/1365407803/photo/rear-of-car-driving-on-highway-in-the-forest-with-mountain-on-gloomy.jpg?s=612x612&w=0&k=20&c=Ht-tHHkir9yNVSOtKgERcWlcZ7RyYHYhKJEkWWEkVkA=",
+      text: "You are not adventurous and decide to leave the animal to its own accord",
+      choices: [
+        { text: "You change your mind and decide to return to the poor animal", next: "start" }
+      ]
+    },
+    checkCollar: {
+      title: "The collar",
+      image: "https://as2.ftcdn.net/v2/jpg/01/76/73/01/1000_F_176730176_sV34W3u9fp9CucMcBq8VKv8WzEOJATJt.jpg",
+      text: "You see that the dog is wearing a shock collar with the owners address attatched to it",
+      choices: [
+        { text: "You take off the collar completely", next: "hardChoice" },
+        { text: "You observe the address and decide you are going to return the dog", next: "returnDog" }
+      ]
+    },
+    hardChoice: {
+      title: "A tough choice",
+      image: "https://media-eu.husse.com/media/b7/7d/b2/1607077541/iStock-932182864.jpg",
+      text: "After taking off the collar you start to second guess yourself, is the owner really abusive? is this even a good thing to do?",
+      choices: [
+        { text: "Decide that this new dog is yours and you will name it", next: "dogName" },
+        { text: "You realise what you are doing is wrong and change your mind", next: "returnDog" }
+      ]
+    },
+    returnDog: {
+      title: "Returning a mans friend",
+      image: "https://media.cnn.com/api/v1/images/stellar/prod/screenshot-2023-12-27-at-8-08-20-am.png?c=16x9&q=w_1280,c_fill",
+      text: "You arrive at the mans house, you see another dog chained to a large metal pole with a shock collar attatched to it.",
+      choices: [
+        { text: "You decide that returning it is 100% the right thing to do and give the man the dog.", next: "gameOver" },
+        { text: "You realise how cruel this man really is and abort your plan deciding the new dog is yours", next: "dogName" }
+      ]
+    },
+    dogName: {
+      title: "A new name",
+      image: "https://www.everypaw.com/.imaging/mte/everypaw/1440x606/dam/dog-breed-guides/labrador/labrador-banner.jpg/jcr:content/labrador-banner.jpg",
+      text: "You pet the jolly dog and decide that its time for it to bear a new name.'",
+      choices: [
+        { text: "You decide to name it: Nala", next: "startAdventure" },
+        { text: "You decide to name it: Pacha", next: "startAdventure" },
+        { text: "You decide to name it: Bucket", next: "startAdventure" },
+        
+      ]
+    },
+    startAdventure: {
+      title: "An adventure begins",
+      image: "https://mydoglikes.com/wp-content/uploads/2022/11/Dog-Offering-Paw-scaled.jpg",
+      text: "You take your new Best Friend home and allow them to acclimatise to the new environment, You think what you should do next with them.",
+      choices: [
+        { text: "Take them for a walk in your favourite field", next: "fieldWalk" },
+        { text: "Go to the petshop with them", next: "petShop" }
+      ]
+    },
+    fieldWalk: {
+      title: "A walk in the field",
+      image: "https://media.istockphoto.com/id/1140984356/photo/golden-labrador-walking-in-the-spring-park-natural-light-in-cloudy-day.jpg?s=612x612&w=0&k=20&c=TriSBQPFg0YDYYYH_Lqa2dQMZQshXwZzXRipsNQcALQ=",
+      text: "Your best friend is absolutely ecstatic, its tail constantly wagging and they keep looking back to make sure you are still there. They suddenly stop and start pawing at something in the ground",
+      choices: [
+        { text: "Go and check out what the dog has found", next: "gemStone" },
+        { text: "Ignore it and keep on walking", next: "endGood" }
+      ]
+    },
+    petShop: {
+      title: "A wonderful coincidence?",
+      image: "https://www.shutterstock.com/image-photo/one-hundred-dollar-banknote-on-600nw-1823662106.jpg",
+      text: "You arrive at the pet shop, as you are about to enter you see a $100 bill lying on the floor. You pick it up and enter the pet shop",
+      choices: [
+        { text: "Spend the entire $100 on your new best friend", next: "endGood" },
+        { text: "Keep it and save for when you would need it the most", next: "endGood" }
+      ]
+    },
+    gemStone: {
+      title: "A shiny object",
+      image: "https://www.middiamonds.com/wp-content/uploads/elementor/thumbs/shutterstock_774586477-1-scaled-prr0urxohb9mtfbnnhcrd2hxblhlzepdx1jungcz00.jpg",
+      text: "You approach the little hole that the dog was pawing at and you see a glint. You dig a little bit and unearth an absolutely beautiful shiny gemstone, it is sure to be worth a pretty penny ",
+      choices: [
+        { text: "Give the dog the biggest hug and walk home side by side", next: "endGood" },
+        { text: "You pat the dog on its head and treat it to a huge beautiful steak for dinner as a result of its efforts", next: "endGood" }
+      ]
+    },
+    gameOver: {
+      title: "Game Over",
+      image: "https://www.purelypetsinsurance.co.uk/media/22onsaka/lab-sleeping.jpg?format=webp",
+      text: "You return the dog to the clearly abusive owner. Your judgement is clouded, you get home and realise the potential consequences of your actions",
+      choices: [
+        { text: "Restart the story", next: "start" }
+      ]
+    },
+    endGood: {
+      title: "Best Friend",
+      image: "https://media.istockphoto.com/id/466989305/photo/man-with-dog.jpg?s=612x612&w=0&k=20&c=3a4OhpehAkeXJCzrRV0HXBVE-pPqxFe6USZMa2I30_Y=",
+      text: "Years pass and you and your best friend are inseperable, you cannot even imagine life without them by your side.",
+      choices: [
+        { text: "Play Again", next: "start" }
+      ]
+    },
+  };
+
+  function speakPage(id) {
+    const p = storyPages[id]; if (!p) return;
+    let t = `${p.title}. ${p.text} `;
+    p.choices.forEach((c,i) => t += `Option ${i+1}: ${c.text}. `);
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(t);
+    const v = localStorage.getItem('ttsVoiceName');
+    if (v) { const vs = window.speechSynthesis.getVoices(); const m=vs.find(x=>x.name===v); if(m) u.voice=m; }
+    window.speechSynthesis.speak(u);
+  }
+
+  function showPage(id) {
+    const p = storyPages[id]; if (!p) return;
+    const cb = document.getElementById('storyContent');
+    let html = `<button id="ttsBtn" onclick="speakPage('${id}')">🔊 Listen</button><h2>${p.title}</h2><img src="${p.image}" class="story-image" alt="${p.title}"><p>${p.text}</p>`;
+    p.choices.forEach(c => html += `<button class="choice-btn" onclick="showPage('${c.next}')">${c.text}</button>`);
+    if (id!=='start') html += `<button class="back-btn" onclick="showPage('start')">← Back to Start</button>`;
+    cb.innerHTML = html;
+  }
+  window.onload = () => {
+    const n = localStorage.getItem('playerName')||'Player';
+    document.getElementById('profileName').textContent = n+' ▼';
+    showPage('start');
+  };
+</script>
+</body>
+</html>
