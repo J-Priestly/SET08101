@@ -1,0 +1,340 @@
+/* CSS variables for easy theming */
+:root {
+  --primary: #4a6fa5;       /* Main brand color */
+  --secondary: #166088;     /* Secondary color */
+  --light: #f8f9fa;         /* Light background */
+  --dark: #343a40;          /* Dark text color */
+  --success: #28a745;       /* Success/green color */
+}
+
+/* Base body styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background: var(--light);
+  color: var(--dark);
+  transition: all 0.3s ease; /* Smooth theme transition */
+}
+
+/* Dark mode styles */
+body.dark-mode {
+  background: #1a1a1a;
+  color: #f0f0f0;
+}
+
+/* Navigation bar styles */
+.navbar {
+  background: var(--primary);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Dropdown menu styles */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: var(--light);
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+/* Dark mode dropdown adjustments */
+.dark-mode .dropdown-content {
+  background-color: #333;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+/* Dropdown menu items */
+.dropdown-content a {
+  color: var(--dark);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  transition: background 0.2s;
+}
+
+/* Dark mode dropdown items */
+.dark-mode .dropdown-content a {
+  color: #f0f0f0;
+}
+
+/* Dropdown item hover effect */
+.dropdown-content a:hover {
+  background-color: rgba(0,0,0,0.1);
+}
+
+/* Dark mode dropdown hover */
+.dark-mode .dropdown-content a:hover {
+  background-color: rgba(255,255,255,0.1);
+}
+
+/* Main content container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Hero section styles */
+.hero {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 4rem 2rem;
+  text-align: center;
+  border-radius: 0 0 20px 20px;
+  margin-bottom: 2rem;
+}
+
+/* Hero heading */
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Hero paragraph */
+.hero p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
+
+/* Base button styles */
+.btn {
+  display: inline-block;
+  background: white;
+  color: var(--primary);
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+}
+
+/* Button hover effects */
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Primary button variant */
+.btn-primary {
+  background: white;
+  color: var(--primary);
+}
+
+/* Outline button variant */
+.btn-outline {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  margin-left: 1rem;
+}
+
+/* Outline button hover */
+.btn-outline:hover {
+  background: white;
+  color: var(--primary);
+}
+
+/* Search container */
+.search-container {
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+/* Search bar layout */
+.search-bar {
+  display: flex;
+  background: white;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+/* Dark mode search bar */
+.dark-mode .search-bar {
+  background: #333;
+}
+
+/* Search input field */
+.search-bar input {
+  flex: 1;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+/* Dark mode search input */
+.dark-mode .search-bar input {
+  background: #333;
+  color: white;
+}
+
+/* Search button */
+.search-bar button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0 1.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+/* Search button hover */
+.search-bar button:hover {
+  background: var(--secondary);
+}
+
+/* Stories grid layout */
+.stories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+/* Story card styles */
+.card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+/* Dark mode card */
+.dark-mode .card {
+  background: #2d2d2d;
+}
+
+/* Card hover effect */
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* Card image container */
+.card-image {
+  height: 150px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Card content area */
+.card-content {
+  padding: 1.5rem;
+}
+
+/* Card title */
+.card h3 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+/* Card description */
+.card p {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+/* Dark mode card text */
+.dark-mode .card p {
+  color: #aaa;
+}
+
+/* Progress container */
+.progress-container {
+  margin: 3rem 0;
+}
+
+/* Progress bar background */
+.progress-bar {
+  height: 8px;
+  background: #e9ecef;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+}
+
+/* Dark mode progress bar */
+.dark-mode .progress-bar {
+  background: #333;
+}
+
+/* Progress indicator */
+.progress {
+  height: 100%;
+  background: var(--success);
+  width: 0%;
+  transition: width 0.5s;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-left: 1rem;
+}
+
+/* Tag/chip styles */
+.tag {
+  display: inline-block;
+  background: rgba(74, 111, 165, 0.1);
+  color: var(--primary);
+  padding: 0.3rem 0.8rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Dark mode tags */
+.dark-mode .tag {
+  background: rgba(74, 111, 165, 0.3);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .hero {
+    padding: 3rem 1rem;
+  }
+
+  .hero h1 {
+    font-size: 2rem;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .btn-outline {
+    margin-left: 0;
+  }
+}
