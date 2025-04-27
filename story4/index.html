@@ -4,240 +4,336 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Witch's Redemption</title>
-  <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
-  <filter id="protanopia">
-    <feColorMatrix type="matrix"
-      values="0.567 0.433 0     0 0
-              0.558 0.442 0     0 0
-              0     0.242 0.758 0 0
-              0     0     0     1 0"/>
-  </filter>
-  <filter id="deuteranopia">
-    <feColorMatrix type="matrix"
-      values="0.8     0.2     0      0 0
-              0.25833 0.74167 0      0 0
-              0       0.14167 0.85833 0 0
-              0       0       0      1 0"/>
-  </filter>
-  <filter id="tritanopia">
-    <feColorMatrix type="matrix"
-      values="0.95 0.05 0     0 0
-              0    0.433 0.567 0 0
-              0    0.475 0.525 0 0
-              0    0     0     1 0"/>
-  </filter>
-</svg>
-  
-  <style>
 
+  <!-- Colour-blind SVG filters -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+    <filter id="protanopia">
+      <feColorMatrix type="matrix"
+        values="0.567 0.433 0     0 0
+                0.558 0.442 0     0 0
+                0     0.242 0.758 0 0
+                0     0     0     1 0"/>
+    </filter>
+    <filter id="deuteranopia">
+      <feColorMatrix type="matrix"
+        values="0.8     0.2     0      0 0
+                0.25833 0.74167 0      0 0
+                0       0.14167 0.85833 0 0
+                0       0       0      1 0"/>
+    </filter>
+    <filter id="tritanopia">
+      <feColorMatrix type="matrix"
+        values="0.95 0.05 0     0 0
+                0    0.433 0.567 0 0
+                0    0.475 0.525 0 0
+                0    0     0     1 0"/>
+    </filter>
+  </svg>
+
+  <style>
     body.protanopia    { filter: url(#protanopia); }
     body.deuteranopia  { filter: url(#deuteranopia); }
     body.tritanopia    { filter: url(#tritanopia); }
-    
-    body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; }
-    .navbar { background: #333; color: white; padding: 1rem; display: flex; justify-content: space-between; }
-    .container { max-width: 800px; margin: 2rem auto; text-align: center; }
-    .content-box { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: left; }
-    .choice-btn { display: block; width: 100%; margin: 0.5rem 0; padding: 10px 20px; background: #4a6fa5; color: white; border: none; border-radius: 5px; cursor: pointer; text-align: left; transition: background 0.3s; }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f4f4;
+      transition: filter 0.3s;
+    }
+    .navbar {
+      background: #333;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      text-align: center;
+    }
+    .content-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      text-align: left;
+    }
+    .choice-btn {
+      display: block;
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 10px 20px;
+      background: #4a6fa5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: left;
+      transition: background 0.3s;
+    }
     .choice-btn:hover { background: #166088; }
-    .back-btn { margin-top: 1rem; padding: 10px 20px; background: #6c757d; color: white; border: none; border-radius: 5px; cursor: pointer; }
-    .story-image { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; margin-bottom: 1rem; }
-    #ttsBtn { display: inline-block; margin-bottom: 1.5rem; padding: 9px 24px; background: #26b24b; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 1.15em; }
+    .back-btn {
+      margin-top: 1rem;
+      padding: 10px 20px;
+      background: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .story-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+    }
+    #ttsBtn {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      padding: 9px 24px;
+      background: #26b24b;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.15em;
+    }
     #ttsBtn:hover { background: #128426; }
   </style>
 </head>
 <body>
-<div class="navbar">
-  <div>Witch's Redemption</div>
-  <div id="profileName">Player ▼</div>
-</div>
-<div class="container">
-  <div class="content-box" id="storyContent"></div>
-</div>
-<script>
-  const storyPages = {
-    start: {
-      title: "The Forrest",
-      image: "https://images.unsplash.com/photo-1483982258113-b72862e6cff6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fHdpdGNofGVufDB8MHwwfHx8Mg%3D%3D",
-      text: "You stand by the enterance of the forrest, said to be cursed by a witch. What will you do?",
-      choices: [
-        { text: "Enter the forrest cautiously", next: "enterForrest" },
-        { text: "Call out a friendly greeting", next: "callOut" },
-        { text: "Return to the safety of the village", next: "returnVillage" }
-      ]
-    },
-    callOut: {
-      title: "Echoing Voice",
-      image: "https://images.unsplash.com/photo-1476362555312-ab9e108a0b7e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8Zm9ycmVzdHxlbnwwfDB8MHx8fDI%3D",
-      text: "Your voice echoes along the trees. A whisper replies: 'Who dares enter my forrest?'",
-      choices: [
-        { text: "Reveal yourself and say hello", next: "friendlyReveal" },
-        { text: "Stay silent and wait", next: "witchApproaches" },
-        { text: "Flee back to the village", next: "start" }
-      ]
-    },
-    friendlyReveal: {
-      title: "Friendly Revelation",
-      image: "https://images.unsplash.com/photo-1653817913970-cd37a2cfff25?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Zm9ycmVzdCUyMHNoYWRvd3N8ZW58MHwwfDB8fHwy",
-      text: "You step into eyesight and explain: 'I come in peace.' The witch emerges from the shadows, curious but wary of your arrival.",
-      choices: [
-        { text: "Explain why your here", next: "kindApproach" },
-        { text: "Stay silent and observe", next: "witchApproaches" }
-      ]
-    },
-    witchApproaches: {
-      title: "Face to Face",
-      image: "https://images.unsplash.com/photo-1619118700545-813abbd986a5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fGV5ZXMlMjBzdGFpcmluZ3xlbnwwfDB8MHx8fDI%3D",
-      text: "The witch steps forward, wand raised, her eyes piercing your heart: 'Speak quickly, or else.'",
-      choices: [
-        { text: "Plead for mercy", next: "witchBackstory" }
-      ]
-    },
-    returnVillage: {
-      title: "Safe Return",
-      image: "https://images.unsplash.com/photo-1520503922584-590e8f7a90d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NDB8fHZpbGxhZ2V8ZW58MHwwfDB8fHwy",
-      text: "You decide the witch is too dangerous. You return home, but you wonder if you could have helped.",
-      choices: [
-        { text: "Return to the Forrest after all", next: "start" }
-      ]
-    },
-    enterForrest: {
-      title: "Witch's Hut",
-      image: "https://images.unsplash.com/photo-1554026614-dc4c6899ce61?q=80&w=2128&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      text: "You find an old hut with smoke comming from its chimney. A figure stares at you.",
-      choices: [
-        { text: "Approach with kindness", next: "kindApproach" },
-        { text: "Hide and observe", next: "observeWitch" }
-      ]
-    },
-    kindApproach: {
-      title: "Unexpected Kindness",
-      image: "",
-      text: "The witch steps back, surprised. Dont you know who i am and what i could do to you?",
-      choices: [
-        { text: "listen to her story", next: "witchBackstory" },
-        { text: "Apologize and leave quietly", next: "gameOver" }
-      ]
-    },
-    observeWitch: {
-      title: "Dark Ritual",
-      image: "https://images.unsplash.com/photo-1450084195263-9a8b47617097?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8b2JzZXJ2ZXxlbnwwfDB8MHx8fDI%3D",
-      text: "Hidden behind a tree, you see her watering dead flowers with a black potion. The air turns colder.",
-      choices: [
-        { text: "Reveal yourself and offer help", next: "witchBackstory" },
-        { text: "Run to warn the village", next: "start" }
-      ]
-    },
-    witchBackstory: {
-      title: "A Heart in Shadows",
-      image: "https://images.unsplash.com/photo-1627809510817-114b55f73a56?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fHNhZCUyMHdpdGNofGVufDB8MHwwfHx8Mg%3D%3D",
-      text: "You see the witches face her eyes filled with sorrow 'They said i was to dangerious but my magic saved their children'",
-      choices: [
-        { text: "Promise to find her lost locket", next: "findLocket" },
-        { text: "Comfort her and ask her to trust you", next: "buildTrust" }
-      ]
-    },
-    findLocket: {
-      title: "Search for the Locket",
-      image: "https://images.unsplash.com/photo-1606730445033-faf694a414bd?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHNlYXJjaGluZ3xlbnwwfDB8MHx8fDI%3D",
-      text: "You recall the locket fell near a pond deeper in the forrest.",
-      choices: [
-        { text: "Venture to the pond", next: "pondSearch" },
-        { text: "Return to her empty-handed", next: "buildTrust" }
-      ]
-    },
-    pondSearch: {
-      title: "Moonlit Pond",
-      image: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=2041&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-      text: "You bend down by the pond and retrieve a silver locket engraved with a rose.",
-      choices: [
-        { text: "Return it to the witch", next: "redeemWitch" },
-        { text: "Keep it for yourself", next: "betray" }
-      ]
-    },
-    buildTrust: {
-      title: "Seeds of Trust",
-      image: "https://images.unsplash.com/photo-1488931260411-17cf8d29a5da?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NjB8fHdpdGNofGVufDB8MHwwfHx8Mg%3D%3D",
-      text: "she sees that you are filled by sorrow yourself and sees your compassion, the witch thinks to herself. 'Perhaps I misjudged humanity'",
-      choices: [
-        { text: "Offer to be her friend", next: "redeemWitch" },
-        { text: "Suggest she help the village", next: "redeemWitch" }
-      ]
-    },
-    redeemWitch: {
-      title: "The Witch Redeemed",
-      image: "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Zm9ycmVzdHxlbnwwfDB8MHx8fDI%3D",
-      text: "With the locket returned and kindness shown, her heart warms. She smiles, using her magic to heal the forrest.",
-      choices: [
-        { text: "Thank her and return home", next: "endGood" },
-        { text: "Ask her to stay and protect the forest", next: "endGuardian" }
-      ]
-    },
-    betray: {
-      title: "Betrayal",
-      image: "https://images.unsplash.com/photo-1594414075815-b98c972b1da5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjR8fHdpdGNoJTIwZm9ycmVzdHxlbnwwfDB8MHx8fDI%3D",
-      text: "As you pocket the locket, the pond's water darkens. The forrest trembles and you flee, guilt in your heart.",
-      choices: [
-        { text: "Return the locket and apologize", next: "redeemWitch" },
-        { text: "Run away forever", next: "gameOver" }
-      ]
-    },
-    gameOver: {
-      title: "Game Over",
-      image: "https://images.unsplash.com/photo-1645260836375-1eef02940a02?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8ZmlubmlzaGVkfGVufDB8MHwwfHx8Mg%3D%3D",
-      text: "Your journey ends here. you remember your mother telling you Kindness costs nothing.",
-      choices: [
-        { text: "Restart the journey", next: "start" }
-      ]
-    },
-    endGood: {
-      title: "A New Dawn",
-      image: "https://images.unsplash.com/photo-1604675127073-078724d7f62f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzB8fGFuaW1hbCUyMGZvcnJlc3R8ZW58MHwwfDB8fHwy",
-      text: "Peace returns to the forest. You carry the story of redemption back to your village.",
-      choices: [
-        { text: "Play Again", next: "start" }
-      ]
-    },
-    endGuardian: {
-      title: "Guardian of the forrest",
-      image: "https://images.unsplash.com/photo-1641482805526-c649dc6fb8fe?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Zm9ycmVzdHxlbnwwfDB8MHx8fDI%3D",
-      text: "The witch vows to use her powers to protect all who walk these woods.",
-      choices: [
-        { text: "Play Again", next: "start" }
-      ]
-    }
-  };
+  <div class="navbar">
+    <div>Witch's Redemption</div>
+    <div id="profileName">Player ▼</div>
+  </div>
 
-  function speakPage(id) {
-    const p = storyPages[id]; if (!p) return;
-    let t = `${p.title}. ${p.text} `;
-    p.choices.forEach((c,i) => t += `Option ${i+1}: ${c.text}. `);
-    window.speechSynthesis.cancel();
-    const u = new SpeechSynthesisUtterance(t);
-    const v = localStorage.getItem('ttsVoiceName');
-    if (v) { const vs = window.speechSynthesis.getVoices(); const m=vs.find(x=>x.name===v); if(m) u.voice=m; }
-    window.speechSynthesis.speak(u);
-  }
+  <div class="container">
+    <div class="content-box" id="storyContent"></div>
+  </div>
 
-  function showPage(id) {
-    const p = storyPages[id]; if (!p) return;
-    const cb = document.getElementById('storyContent');
-    let html = `<button id="ttsBtn" onclick="speakPage('${id}')">🔊 Listen</button><h2>${p.title}</h2><img src="${p.image}" class="story-image" alt="${p.title}"><p>${p.text}</p>`;
-    p.choices.forEach(c => html += `<button class="choice-btn" onclick="showPage('${c.next}')">${c.text}</button>`);
-    if (id!=='start') html += `<button class="back-btn" onclick="showPage('start')">← Back to Start</button>`;
-    cb.innerHTML = html;
-  }
-
-  const savedMode = localStorage.getItem('colourBlind');
-if (savedMode && ['protanopia','deuteranopia','tritanopia'].includes(savedMode)) {
-  document.body.classList.add(savedMode);
-}
+  <script>
   
-  window.onload = () => {
-    const n = localStorage.getItem('playerName')||'Player';
-    document.getElementById('profileName').textContent = n+' ▼';
-    showPage('start');
-  };
-</script>
+    function getCompletedStories() {
+      return JSON.parse(localStorage.getItem('completedStories') || '[]');
+    }
+    function setCompletedStories(arr) {
+      localStorage.setItem('completedStories', JSON.stringify(arr));
+    }
+    function markStoryCompleted(id) {
+      const list = getCompletedStories();
+      if (!list.includes(id)) {
+        list.push(id);
+        setCompletedStories(list);
+      }
+    }
+
+
+    const storyPages = {
+      start: {
+        title: "The Forest",
+        image: "https://images.unsplash.com/photo-1483982258113-b72862e6cff6?w=500&auto=format&fit=crop&q=60",
+        text: "You stand by the entrance of the forest, said to be cursed by a witch. What will you do?",
+        choices: [
+          { text: "Enter the forest cautiously", next: "enterForrest" },
+          { text: "Call out a friendly greeting", next: "callOut" },
+          { text: "Return to the safety of the village", next: "returnVillage" }
+        ]
+      },
+      callOut: {
+        title: "Echoing Voice",
+        image: "https://images.unsplash.com/photo-1476362555312-ab9e108a0b7e?w=500&auto=format&fit=crop&q=60",
+        text: "Your voice echoes along the trees. A whisper replies: 'Who dares enter my forest?'",
+        choices: [
+          { text: "Reveal yourself and say hello", next: "friendlyReveal" },
+          { text: "Stay silent and wait", next: "witchApproaches" },
+          { text: "Flee back to the village", next: "start" }
+        ]
+      },
+      friendlyReveal: {
+        title: "Friendly Revelation",
+        image: "https://images.unsplash.com/photo-1653817913970-cd37a2cfff25?w=500&auto=format&fit=crop&q=60",
+        text: "You step into eyesight and explain: 'I come in peace.' The witch emerges from the shadows, curious but wary of your arrival.",
+        choices: [
+          { text: "Explain why you're here", next: "kindApproach" },
+          { text: "Stay silent and observe", next: "witchApproaches" }
+        ]
+      },
+      witchApproaches: {
+        title: "Face to Face",
+        image: "https://images.unsplash.com/photo-1619118700545-813abbd986a5?w=500&auto=format&fit=crop&q=60",
+        text: "The witch steps forward, wand raised: 'Speak quickly, or else.'",
+        choices: [
+          { text: "Plead for mercy", next: "witchBackstory" }
+        ]
+      },
+      returnVillage: {
+        title: "Safe Return",
+        image: "https://images.unsplash.com/photo-1520503922584-590e8f7a90d7?w=500&auto=format&fit=crop&q=60",
+        text: "You decide the witch is too dangerous. You return home, but wonder if you could have helped.",
+        choices: [
+          { text: "Return to the forest after all", next: "start" }
+        ]
+      },
+      enterForrest: {
+        title: "Witch's Hut",
+        image: "https://images.unsplash.com/photo-1554026614-dc4c6899ce61?q=80&w=2128&auto=format&fit=crop",
+        text: "You find an old hut with smoke coming from its chimney. A figure stares at you.",
+        choices: [
+          { text: "Approach with kindness", next: "kindApproach" },
+          { text: "Hide and observe", next: "observeWitch" }
+        ]
+      },
+      kindApproach: {
+        title: "Unexpected Kindness",
+        image: "",
+        text: "The witch steps back, surprised. 'Don't you know who I am and what I could do to you?'",
+        choices: [
+          { text: "Listen to her story", next: "witchBackstory" },
+          { text: "Apologize and leave quietly", next: "gameOver" }
+        ]
+      },
+      observeWitch: {
+        title: "Dark Ritual",
+        image: "https://images.unsplash.com/photo-1450084195263-9a8b47617097?w=500&auto=format&fit=crop&q=60",
+        text: "Hidden behind a tree, you see her watering dead flowers with a black potion. The air turns colder.",
+        choices: [
+          { text: "Reveal yourself and offer help", next: "witchBackstory" },
+          { text: "Run to warn the village", next: "start" }
+        ]
+      },
+      witchBackstory: {
+        title: "A Heart in Shadows",
+        image: "https://images.unsplash.com/photo-1627809510817-114b55f73a56?w=500&auto=format&fit=crop&q=60",
+        text: "You see sorrow fill her eyes. 'They said I was too dangerous, but my magic saved their children.'",
+        choices: [
+          { text: "Promise to find her lost locket", next: "findLocket" },
+          { text: "Comfort her and ask her to trust you", next: "buildTrust" }
+        ]
+      },
+      findLocket: {
+        title: "Search for the Locket",
+        image: "https://images.unsplash.com/photo-1606730445033-faf694a414bd?w=500&auto=format&fit=crop&q=60",
+        text: "You recall the locket fell near a pond deeper in the forest.",
+        choices: [
+          { text: "Venture to the pond", next: "pondSearch" },
+          { text: "Return empty-handed", next: "buildTrust" }
+        ]
+      },
+      pondSearch: {
+        title: "Moonlit Pond",
+        image: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=2041&auto=format&fit=crop",
+        text: "You bend down by the pond and retrieve a silver locket engraved with a rose.",
+        choices: [
+          { text: "Return it to the witch", next: "redeemWitch" },
+          { text: "Keep it for yourself", next: "betray" }
+        ]
+      },
+      buildTrust: {
+        title: "Seeds of Trust",
+        image: "https://images.unsplash.com/photo-1488931260411-17cf8d29a5da?w=500&auto=format&fit=crop&q=60",
+        text: "She sees your compassion. 'Perhaps I misjudged humanity,' she thinks.",
+        choices: [
+          { text: "Offer to be her friend", next: "redeemWitch" },
+          { text: "Suggest she help the village", next: "redeemWitch" }
+        ]
+      },
+      redeemWitch: {
+        title: "The Witch Redeemed",
+        image: "https://images.unsplash.com/photo-1425913397330-cf8af2ff40a1?w=500&auto=format&fit=crop&q=60",
+        text: "With the locket returned and kindness shown, her heart warms and she heals the forest.",
+        choices: [
+          { text: "Thank her and return home", next: "endGood" },
+          { text: "Ask her to stay and protect the forest", next: "endGuardian" }
+        ]
+      },
+      betray: {
+        title: "Betrayal",
+        image: "https://images.unsplash.com/photo-1594414075815-b98c972b1da5?w=500&auto=format&fit=crop&q=60",
+        text: "You pocket the locket; the forest trembles and you flee, guilt in your heart.",
+        choices: [
+          { text: "Return the locket and apologize", next: "redeemWitch" },
+          { text: "Run away forever", next: "gameOver" }
+        ]
+      },
+      gameOver: {
+        title: "Game Over",
+        image: "https://images.unsplash.com/photo-1645260836375-1eef02940a02?w=500&auto=format&fit=crop&q=60",
+        text: "Your journey ends here. You remember your mother telling you kindness costs nothing.",
+        choices: [
+          { text: "Restart the journey", next: "start" }
+        ]
+      },
+      endGood: {
+        title: "A New Dawn",
+        image: "https://images.unsplash.com/photo-1604675127073-078724d7f62f?w=500&auto=format&fit=crop&q=60",
+        text: "Peace returns to the forest. You carry the story of redemption back to your village.",
+        choices: [
+          { text: "Play Again", next: "start" }
+        ]
+      },
+      endGuardian: {
+        title: "Guardian of the Forest",
+        image: "https://images.unsplash.com/photo-1641482805526-c649dc6fb8fe?w=500&auto=format&fit=crop&q=60",
+        text: "The witch vows to use her powers to protect all who walk these woods.",
+        choices: [
+          { text: "Play Again", next: "start" }
+        ]
+      }
+    };
+
+
+    function speakPage(id) {
+      const p = storyPages[id];
+      if (!p) return;
+      let text = `${p.title}. ${p.text} `;
+      p.choices.forEach((c,i) => text += `Option ${i+1}: ${c.text}. `);
+      window.speechSynthesis.cancel();
+      const utt = new SpeechSynthesisUtterance(text);
+      const voiceName = localStorage.getItem('ttsVoiceName');
+      if (voiceName) {
+        const vs = window.speechSynthesis.getVoices();
+        const v  = vs.find(x=>x.name===voiceName);
+        if (v) utt.voice = v;
+      }
+      window.speechSynthesis.speak(utt);
+    }
+
+
+    function showPage(id) {
+      const p = storyPages[id];
+      if (!p) return;
+     
+      let html = `<button id="ttsBtn" onclick="speakPage('${id}')">🔊 Listen</button>
+                  <h2>${p.title}</h2>
+                  <img src="${p.image}" class="story-image" alt="${p.title}">
+                  <p>${p.text}</p>`;
+      p.choices.forEach(c => {
+        html += `<button class="choice-btn" onclick="showPage('${c.next}')">${c.text}</button>`;
+      });
+   
+      if (p.choices.length===1 && p.choices[0].next==='start') {
+        const storyId = localStorage.getItem('currentStory');
+        markStoryCompleted(storyId);
+      }
+      
+      document.getElementById('storyContent').innerHTML = html;
+    }
+
+  
+    window.onload = () => {
+      const name = localStorage.getItem('playerName') || 'Player';
+      document.getElementById('profileName').textContent = name + ' ▼';
+
+      const mode = localStorage.getItem('colourBlind');
+      if (mode && ['protanopia','deuteranopia','tritanopia'].includes(mode)) {
+        document.body.classList.add(mode);
+      }
+
+      showPage('start');
+    };
+  </script>
 </body>
 </html>
