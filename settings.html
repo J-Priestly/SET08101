@@ -5,10 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Settings</title>
 
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
- 
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <filter id="protanopia">
       <feColorMatrix type="matrix"
@@ -266,7 +264,6 @@
           </button>
         </div>
 
-      
         <form id="colourForm" onsubmit="event.preventDefault(); saveColourBlind();">
           <label for="colourSelect">Colour-blind mode:</label>
           <select id="colourSelect" aria-label="Select colour-blind simulation">
@@ -313,7 +310,6 @@
   </div>
 
   <script>
-   
     const storedName = localStorage.getItem('playerName') || 'Player';
     const storedTheme = localStorage.getItem('theme') || 'dark';
     const storedFont  = localStorage.getItem('fontSize') || 'normal';
@@ -330,7 +326,6 @@
     applyContrast(storedContrast);
     applyColourBlind(storedColour);
 
-    
     function saveName() {
       const newName = document.getElementById('nameInput').value.trim();
       if (!newName) return;
@@ -354,10 +349,9 @@
     function toggleContactInfo() {
       const ci = document.getElementById('contactInfo');
       ci.style.display = ci.style.display === 'block' ? 'none' : 'block';
-      if (ci.style.display === 'block') ci.scrollIntoView({ behaviour: 'smooth' });
+      if (ci.style.display === 'block') ci.scrollIntoView({ behavior: 'smooth' });
     }
 
-    
     function applyTheme(mode) {
       document.body.classList.toggle('dark-mode', mode === 'dark');
     }
@@ -368,7 +362,6 @@
       showNotification(`Theme changed to ${next}`);
     }
 
-   
     function applyFontSize(size) {
       document.body.style.fontSize = (size === 'large') ? '18px' : '16px';
     }
@@ -378,7 +371,6 @@
       applyFontSize(next);
       showNotification(`Font size changed to ${next}`);
     }
-
 
     function applyContrast(mode) {
       document.body.classList.toggle('high-contrast', mode === 'high');
@@ -391,7 +383,6 @@
       showNotification(`Contrast changed to ${next}`);
     }
 
-   
     function applyColourBlind(mode) {
       ['protanopia','deuteranopia','tritanopia'].forEach(c =>
         document.body.classList.toggle(c, c === mode)
@@ -409,35 +400,44 @@
       showNotification(`Colour-blind mode: ${sel}`);
     }
 
-  
     let voices = [];
     function loadVoices() {
-      voices = speechSynthesis.getVoices();
+      voices = window.speechSynthesis.getVoices();
       const sel = document.getElementById('voiceSelect');
       sel.innerHTML = '';
       voices.forEach(v => {
         const opt = document.createElement('option');
         opt.value = v.name;
-        opt.textContent = `${v.name} (${v.lang})${v.default?' [default]':''}`;
+        opt.textContent = `${v.name} (${v.lang})${v.default ? ' [default]' : ''}`;
         sel.appendChild(opt);
       });
       const saved = localStorage.getItem('ttsVoiceName');
-      if (saved) sel.value = saved;
+      if (saved && voices.some(v => v.name === saved)) {
+        sel.value = saved;
+      }
     }
+
+    speechSynthesis.onvoiceschanged = loadVoices;
+    if (speechSynthesis.getVoices().length > 0) {
+      loadVoices();
+    }
+
     function saveVoice() {
       const v = document.getElementById('voiceSelect').value;
       localStorage.setItem('ttsVoiceName', v);
       showNotification('Voice preference saved!');
     }
+
     function testVoice() {
       const utt = new SpeechSynthesisUtterance('This is a test of the selected voice.');
       const name = localStorage.getItem('ttsVoiceName') || document.getElementById('voiceSelect').value;
       const voice = voices.find(x => x.name === name);
-      if (voice) utt.voice = voice;
+      if (voice) {
+        utt.voice = voice;
+        utt.lang = voice.lang;
+      }
       speechSynthesis.speak(utt);
     }
-    speechSynthesis.onvoiceschanged = loadVoices;
-    document.addEventListener('DOMContentLoaded', loadVoices);
   </script>
 </body>
 </html>
