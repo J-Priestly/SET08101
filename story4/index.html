@@ -4,7 +4,36 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>The Witch's Redemption</title>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+  <filter id="protanopia">
+    <feColorMatrix type="matrix"
+      values="0.567 0.433 0     0 0
+              0.558 0.442 0     0 0
+              0     0.242 0.758 0 0
+              0     0     0     1 0"/>
+  </filter>
+  <filter id="deuteranopia">
+    <feColorMatrix type="matrix"
+      values="0.8     0.2     0      0 0
+              0.25833 0.74167 0      0 0
+              0       0.14167 0.85833 0 0
+              0       0       0      1 0"/>
+  </filter>
+  <filter id="tritanopia">
+    <feColorMatrix type="matrix"
+      values="0.95 0.05 0     0 0
+              0    0.433 0.567 0 0
+              0    0.475 0.525 0 0
+              0    0     0     1 0"/>
+  </filter>
+</svg>
+  
   <style>
+
+    body.protanopia    { filter: url(#protanopia); }
+    body.deuteranopia  { filter: url(#deuteranopia); }
+    body.tritanopia    { filter: url(#tritanopia); }
+    
     body { font-family: Arial, sans-serif; margin: 0; background: #f4f4f4; }
     .navbar { background: #333; color: white; padding: 1rem; display: flex; justify-content: space-between; }
     .container { max-width: 800px; margin: 2rem auto; text-align: center; }
@@ -198,6 +227,12 @@
     if (id!=='start') html += `<button class="back-btn" onclick="showPage('start')">← Back to Start</button>`;
     cb.innerHTML = html;
   }
+
+  const savedMode = localStorage.getItem('colourBlind');
+if (savedMode && ['protanopia','deuteranopia','tritanopia'].includes(savedMode)) {
+  document.body.classList.add(savedMode);
+}
+  
   window.onload = () => {
     const n = localStorage.getItem('playerName')||'Player';
     document.getElementById('profileName').textContent = n+' ▼';
