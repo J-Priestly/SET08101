@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>School Adventures</title>
+  <link rel="stylesheet" href="story7.css">
+</head>
+<body>
+<div class="navbar">
+  <div>School Adventures</div>
+  <div id="playerName">Player ▼</div>
+</div>
+
+<div class="container">
+  <div class="content-box" id="storyContent"></div>
+</div>
+
+<script>
+const story = {
+  start: {
+    title: "First Day!",
+    image: "https://cdn.pixabay.com/photo/2017/02/15/12/12/school-2068727_960_720.png",
+    text: "Today is your first day at your new school. You feel excited and a little nervous. Where will you go first?",
+    choices: [
+      { text: "Explore the playground", next: "playground" },
+      { text: "Visit the library", next: "library" },
+      { text: "Find your classroom", next: "classroom" }
+    ]
+  },
+  playground: {
+    title: "Playground Fun",
+    image: "https://cdn.pixabay.com/photo/2018/05/18/01/18/playground-3408904_960_720.jpg",
+    text: "You meet a group of kids playing tag. They invite you to join!",
+    choices: [
+      { text: "Join the game", next: "newFriends" },
+      { text: "Go back inside", next: "start" }
+    ]
+  },
+  library: {
+    title: "Quiet Time",
+    image: "https://cdn.pixabay.com/photo/2017/06/29/00/06/books-2451462_960_720.jpg",
+    text: "The library is full of colorful books. A kind librarian waves at you.",
+    choices: [
+      { text: "Check out a book", next: "bookAdventure" },
+      { text: "Return to the hallway", next: "start" }
+    ]
+  },
+  classroom: {
+    title: "Finding Your Seat",
+    image: "https://cdn.pixabay.com/photo/2017/03/20/01/49/classroom-2159464_960_720.jpg",
+    text: "You find your classroom. The teacher smiles and shows you to your seat.",
+    choices: [
+      { text: "Introduce yourself to classmates", next: "newFriends" },
+      { text: "Stay quiet for now", next: "quietStart" }
+    ]
+  },
+  newFriends: {
+    title: "New Friends!",
+    image: "https://cdn.pixabay.com/photo/2015/10/12/15/09/children-984812_960_720.jpg",
+    text: "You laugh and have fun. It feels great to make new friends on your first day!",
+    choices: [
+      { text: "Explore more", next: "start" }
+    ]
+  },
+  bookAdventure: {
+    title: "A Book Adventure",
+    image: "https://cdn.pixabay.com/photo/2017/01/20/00/30/fantasy-1992344_960_720.jpg",
+    text: "You find a book about pirates. As you read, you imagine yourself sailing the seas!",
+    choices: [
+      { text: "Keep reading", next: "library" },
+      { text: "Go find your classroom", next: "classroom" }
+    ]
+  },
+  quietStart: {
+    title: "Taking it Slow",
+    image: "https://cdn.pixabay.com/photo/2016/01/19/16/47/children-1149671_960_720.jpg",
+    text: "You listen carefully as the teacher explains everything. Maybe you’ll make friends after class.",
+    choices: [
+      { text: "Talk to someone after class", next: "newFriends" },
+      { text: "Head to the playground", next: "playground" }
+    ]
+  }
+};
+
+function showPage(id) {
+  const page = story[id];
+  if (!page) return;
+  const content = document.getElementById('storyContent');
+  let html = `<h2>${page.title}</h2><img src="${page.image}" class="story-image" alt="${page.title}"><p>${page.text}</p>`;
+  page.choices.forEach(choice => {
+    html += `<button class="choice-btn" onclick="showPage('${choice.next}')">${choice.text}</button>`;
+  });
+  if (id !== 'start') {
+    html += `<button class="back-btn" onclick="showPage('start')">← Back to Start</button>`;
+  }
+  content.innerHTML = html;
+}
+
+window.onload = () => {
+  const name = localStorage.getItem('playerName') || 'Player';
+  document.getElementById('playerName').textContent = name + ' ▼';
+  showPage('start');
+};
+</script>
+</body>
+</html>
